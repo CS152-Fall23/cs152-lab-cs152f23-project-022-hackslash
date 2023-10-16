@@ -22,11 +22,11 @@ UNDERSCORE [_]
 "break/"            {printf("Break statement: %s\n", yytext); currCol += yyleng;}
 "if/"               {printf("IF/\n"); currCol += yyleng;}
 "else/"             {printf("ELSE/\n"); currCol += yyleng;}
-"elseif/"          {printf("ELSEIF/\n"); currCol += yyleng;}
+"elseif/"           {printf("ELSEIF/\n"); currCol += yyleng;}
 "in/"               {printf("IN/\n"); currCol += yyleng;}
 "out/"              {printf("OUT/\n"); currCol += yyleng;}
 "print/"            {printf("PRINT/\n"); currCol += yyleng;}
-"\n"				{printf("NEWLINE\n"); currLine += yyleng; currCol = 0;}
+"\n"                {printf("NEWLINE\n"); currLine += yyleng; currCol = 0;}
 
 
 {IDENTIFIER}	    {printf("IDENT %s\n", yytext); currCol += yyleng;}
