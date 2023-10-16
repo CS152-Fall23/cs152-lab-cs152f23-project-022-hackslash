@@ -5,7 +5,7 @@ void bubbleSort(int/ arr[], int/ n) {
 		swapped = false; 
 		do {
 			if/ (arr[j] gth/ arr[j add/ 1]) {
-				swap(arr[j], arr[j add/ 1];
+				swap(arr[j], arr[j add/ 1]);
 				swapped = true;
 			}
 		j = j add/ 1;

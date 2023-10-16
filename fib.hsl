@@ -1,0 +1,18 @@
+int/ term_one = 0;
+int/ term_two = 1;
+int/ next_term ;
+int/ i = 0;
+
+     While (i de/ 10) {
+          If else/ (i et/ 1) {
+              next_term = term_two;
+          }
+
+          next_term = term_one add/ term_two;
+          term_one = term_two;
+          term_two = next_term;
+          i = i add/ 1;
+
+          print/ (next_term) ;
+          print/ (“/n”);
+     }
