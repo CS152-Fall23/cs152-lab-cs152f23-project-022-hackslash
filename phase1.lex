@@ -1,6 +1,13 @@
 %{
-    
+#include <stdio.h>
+#include <math.h>
+
+unsigned long long current_line = 1;
+unsigned long long current_column = 0;
+#define YY_USER_ACTION current_column += yyleng; 
 %}
+
+%option noyywrap
 
 DIGIT [0-9]
 DIGIT_UNDERSCORE [0-9_]
