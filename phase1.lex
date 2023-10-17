@@ -15,6 +15,14 @@ UNDERSCORE [_]
 
 
 %%
+"int/"+" "{ID}|"double/"+" "{ID}|"string/"+" "{ID}       printf( "An Variable: %s\n", yytext );
+
+"*"   printf( "An One Line Comment: %s\n", yytext );
+
+"*/" printf( "A Multi-line Comment (Start): %s\n", yytext );
+
+"/*" printf( "A Multi-line Comment (End): %s\n", yytext );
+
 
 "["                 {printf("Left Square Bracket \n");}
 "]"                 {printf("Right Square Bracket \n");}
