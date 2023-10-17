@@ -12,6 +12,8 @@ ID[a-z][a-zA-Z0-9]*
 LETTER [a-zA-Z]
 IDENTIFIER  ({LETTER}({LETTER}|{DIGIT}|"_")*({LETTER}|{DIGIT}))|{LETTER}
 UNDERSCORE [_]
+ARITHMETIC[(add\/)|(sub\/)|(mul\/)|(div\/)]
+RELATIONAL[(lth\/)|(gth\/)|(eqt\/)|(lte\/)|(gte\/)|(neq\/)]
 
 
 %%
@@ -27,10 +29,14 @@ UNDERSCORE [_]
 "out/"              {printf("OUT/\n"); currCol += yyleng;}
 "print/"            {printf("PRINT/\n"); currCol += yyleng;}
 "\n"                {printf("NEWLINE\n"); currLine += yyleng; currCol = 0;}
+"while/"            {printf("WHILE/\n"); currLine += yyleng;}
+"do/"               {printf("DO/(WHILE)\n"); currLine += yyleng;}
+
 
 
 {IDENTIFIER}	    {printf("IDENT %s\n", yytext); currCol += yyleng;}
-
+{ARITHMETIC}        {printf("ARITHMETIC OP: %s\n", yytext); currCol += yyleng;}
+{RELATIONAL}        {printf("RELATIONAL OP: %s\n, yytext); currCol += yyleng;}
 ({DIGIT}|{UNDERSCORE})+{IDENTIFIER}			{printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", currLine, currCol, yytext); exit(0);}
 {IDENTIFIER}{UNDERSCORE}+                   {printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", currLine, currCol, yytext); exit(0);}
 
