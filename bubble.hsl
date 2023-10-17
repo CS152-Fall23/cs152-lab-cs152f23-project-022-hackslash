@@ -1,4 +1,5 @@
 void/ bubbleSort(int/ arr[], int/ n) {
+	*/ Comment /*
 	int/ i, j = 0;
 	bool/ swapped;
 	do {
