@@ -1,5 +1,6 @@
 %option noyywrap
 %{ 
+	//libraries
     #include <math.h>
     #include <stdio.h>
 	
