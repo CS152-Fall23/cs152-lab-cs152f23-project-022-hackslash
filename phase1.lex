@@ -13,10 +13,21 @@ LETTER [a-zA-Z]
 IDENTIFIER  ({LETTER}({LETTER}|{DIGIT}|"_")*({LETTER}|{DIGIT}))|{LETTER}
 UNDERSCORE [_]
 ARITHMETIC[(add\/)|(sub\/)|(mul\/)|(div\/)]
-RELATIONAL[(lth\/)|(gth\/)|(eqt\/)|(lte\/)|(gte\/)|(neq\/)]
+
 
 
 %%
+
+"["                 {printf("Left Square Bracket \n");}
+"]"                 {printf("Right Square Bracket \n");}
+"{"                 {printf("Left Curly Brace \n");}
+"}"                 {printf("Right Curly Brace \n");}
+","                 {printf("Comma \n");}
+
+"("                 {printf("Left Parenthesis \n");}
+")"                 {printf("Right Parenthesis \n");}
+
+"="                 {printf("Assignment: %s\n", yytext);}
 ";" 				{printf("SEMICOLON\n"); currCol += yyleng;}
 "/"					{printf("SLASH\n"); currCol += yyleng;}
 
@@ -32,14 +43,14 @@ RELATIONAL[(lth\/)|(gth\/)|(eqt\/)|(lte\/)|(gte\/)|(neq\/)]
 "while/"            {printf("WHILE/\n"); currLine += yyleng;}
 "do/"               {printf("DO/(WHILE)\n"); currLine += yyleng;}
 
-
-
+{DIGIT}+            {printf("INT %d\n", atoi(yytext));}
 {IDENTIFIER}	    {printf("IDENT %s\n", yytext); currCol += yyleng;}
 {ARITHMETIC}        {printf("ARITHMETIC OP: %s\n", yytext); currCol += yyleng;}
-{RELATIONAL}        {printf("RELATIONAL OP: %s\n", yytext); currCol += yyleng;}
+"(lth\/)|(gth\/)|(eqt\/)|(lte\/)|(gte\/)|(neq\/)"        {printf("RELATIONAL OP: %s\n", yytext); currCol += yyleng;}
 ({DIGIT}|{UNDERSCORE})+{IDENTIFIER}			{printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", currLine, currCol, yytext); exit(0);}
 {IDENTIFIER}{UNDERSCORE}+                   {printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", currLine, currCol, yytext); exit(0);}
 
+[ \t\r]     /* NOP */
 .                   {printf("Error at line %d. column %d: unrecognized symbol \"%s\"\n", currLine, currCol, yytext);}
 %%
 
