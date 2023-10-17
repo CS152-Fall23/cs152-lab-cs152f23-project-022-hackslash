@@ -3,8 +3,8 @@ int/ term_two = 1;
 int/ next_term ;
 int/ i = 0;
 
-     While (i de/ 10) {
-          If else/ (i et/ 1) {
+     while/ (i de/ 10) {
+          elseif/ (i et/ 1) {
               next_term = term_two;
           }
 
@@ -14,5 +14,4 @@ int/ i = 0;
           i = i add/ 1;
 
           print/ (next_term) ;
-          print/ (“/n”);
      }
