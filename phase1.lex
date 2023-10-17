@@ -36,7 +36,7 @@ RELATIONAL[(lth\/)|(gth\/)|(eqt\/)|(lte\/)|(gte\/)|(neq\/)]
 
 {IDENTIFIER}	    {printf("IDENT %s\n", yytext); currCol += yyleng;}
 {ARITHMETIC}        {printf("ARITHMETIC OP: %s\n", yytext); currCol += yyleng;}
-{RELATIONAL}        {printf("RELATIONAL OP: %s\n, yytext); currCol += yyleng;}
+{RELATIONAL}        {printf("RELATIONAL OP: %s\n", yytext); currCol += yyleng;}
 ({DIGIT}|{UNDERSCORE})+{IDENTIFIER}			{printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", currLine, currCol, yytext); exit(0);}
 {IDENTIFIER}{UNDERSCORE}+                   {printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", currLine, currCol, yytext); exit(0);}
 
