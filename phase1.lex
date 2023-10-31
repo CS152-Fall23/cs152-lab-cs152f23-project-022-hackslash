@@ -6,6 +6,8 @@
 	
     int currLine = 1;
     int currCol = 0;
+
+	#include "y.tab.c"
 %}
 
 DIGIT[0-9]
