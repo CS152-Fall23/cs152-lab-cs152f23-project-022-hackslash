@@ -20,6 +20,27 @@
 %%
 /* grammar */
 
+add_exp: mul_exp { $$ = $1; }
+| add_exp ADD add_exp { $$ = $1 + $3; } 
+| add_exp SUB add_exp { $$ = $1 - $3; }
+
+Mul_exp:exp { $$ = $1; }
+| mul_exp MUL mul_exp { $$ = $1 * $3; } 
+| mul_exp DIV mul_exp { $$ = $1 / $3; } 
+
+exp: NUM { $$ = $1; } 
+| SUB exp { $$ = -$1; }
+| ( add_exp ) { $$ = $2; }
+
+
+REL: lth/ { $$ = $1 < $3; } 
+| gth/ { $$ = $1 > $3; } 
+| eqt/ { $$ = $1 == $3; } 
+| lte/ { $$ = $1 <= $3; } 
+| gte/ { $$ = $1 >= $3; } 
+| neq/ { $$ = $1 != $3; } 
+
+
    program: 
 
 %%
