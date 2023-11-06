@@ -40,6 +40,15 @@ REL: lth/ { $$ = $1 < $3; }
 | gte/ { $$ = $1 >= $3; } 
 | neq/ { $$ = $1 != $3; } 
 
+VAR:
+int/ { $$ = int/ $1; }
+| string/ { $$ = string/ $1; }
+| double/ { $$ = double/ $1; }
+| char/ { $$ = char/ $1; }
+| bool/ { $$ = bool/ $1; }
+| void/ { $$ = void/ $1; }
+
+
 
    program: 
 
