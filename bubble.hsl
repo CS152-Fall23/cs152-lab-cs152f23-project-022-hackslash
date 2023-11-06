@@ -1,12 +1,18 @@
-void/ bubbleSort(int/ arr[], int/ n) {
-	*/ Comment /*
-	int/ i, j = 0;
+void(f) bubbleSort(int/ arr[], int/ n) {
+	*/ dadsf
+	asdfa
+	/*
+
+	* fadsf;kj
+
+	int/ i = 0;
+	int/ j = 0;
 	bool/ swapped;
 	do {
 		swapped = false; 
 		do {
 			if/ (arr[j] gth/ arr[j add/ 1]) {
-				swap(arr[j], arr[j add/ 1]);
+				swap(arr[j], arr[j add/ 1])
 				swapped = true;
 			}
 		j = j add/ 1;

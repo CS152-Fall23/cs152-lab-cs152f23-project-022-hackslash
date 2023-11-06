@@ -1,17 +1,17 @@
-int/ term_one = 0;
-int/ term_two = 1;
-int/ next_term ;
+int/ one = 0;
+int/ two = 1;
+int/ term ;
 int/ i = 0;
 
-     while/ (i de/ 10) {
-          elseif/ (i et/ 1) {
-              next_term = term_two;
-          }
-
-          next_term = term_one add/ term_two;
-          term_one = term_two;
-          term_two = next_term;
-          i = i add/ 1;
-
-          print/ (next_term) ;
+while/ (i neq/ 10) {
+     elseif/ (i eqt/ s1) {
+          term = two;
      }
+
+     @term = one add/ two;
+     one = two;
+     two = term;
+     i = i add/ 1;
+     
+     print/ (term) ;
+}

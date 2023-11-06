@@ -6,6 +6,8 @@
 	
     int currLine = 1;
     int currCol = 0;
+
+	#include "y.tab.c"
 %}
 
 DIGIT[0-9]
@@ -42,12 +44,16 @@ UNDERSCORE [_]
 "in/"               {printf("IN/\n"); currCol += yyleng;}
 "out/"              {printf("OUT/\n"); currCol += yyleng;}
 "print/"            {printf("PRINT/\n"); currCol += yyleng;}
+
 "\n"                currLine++; currCol = 0;
 "while/"            {printf("WHILE/\n"); currCol += yyleng;}
 "do/"               {printf("DO/(WHILE)\n"); currCol += yyleng;}
 " "					currCol++;
 (\*\/)(.|\n)*(\/\*)
 "*".*
+"\n"                {printf("NEWLINE\n"); currLine += yyleng; currCol = 0;}
+"while/"            {printf("WHILE/\n"); currCol += yyleng;}
+"do/"               {printf("DO/(WHILE)\n"); currCol += yyleng;}
 
 {DIGIT}+            {printf("INT %d\n", atoi(yytext));}
 {IDENTIFIER}	    {printf("IDENT %s\n", yytext); currCol += yyleng;}
