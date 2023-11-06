@@ -19,7 +19,7 @@ UNDERSCORE [_]
 
 
 %%
-"int/"+" "{ID}|"double/"+" "{ID}|"string/"+" "{ID}|"bool/"+" "     printf( "An Variable: %s\n", yytext );
+"int/"+" "{ID}|"double/"+" "{ID}|"string/"+" "{ID}|"bool/"+" "    {return VAR;}
 
 
 
