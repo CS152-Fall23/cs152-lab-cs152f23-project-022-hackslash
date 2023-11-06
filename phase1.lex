@@ -29,39 +29,45 @@ UNDERSCORE [_]
 "{"                 {return L_CURLY;}
 "}"                 {return R_CURLY;}
 ","                 {return COMMA;}
-
 "("                 {return L_PAREN;}
 ")"                 {return R_PAREN;}
 
 "="                 {return EQL;}
-";" 				{return SEMI;}
+";" 				{return SEMI; currCol += yyleng;}
 
 
-"break/"            {return BREAK;}
-"if/"               {return IF;}
-"else/"             {return ELSE;}
-"elseif/"           {return ELIF;}
-"in/"               {return IN;}
-"out/"              {return OUT;}
-"print/"            {return PRINT;}
+"break/"            {return BREAK; currCol += yyleng;}
+"if/"               {return IF; currCol += yyleng;}
+"else/"             {return ELSE; currCol += yyleng;}
+"elseif/"           {return ELIF; currCol += yyleng;}
+"in/"               {return IN; currCol += yyleng;}
+"out/"              {return OUT; currCol += yyleng;}
+"print/"            {return PRINT; currCol += yyleng;}
 
-"\n"                currLine++; currCol = 0;
-"while/"            {printf("WHILE/\n"); currCol += yyleng;}
-"do/"               {printf("DO/(WHILE)\n"); currCol += yyleng;}
+"\n"                {currLine++; currCol = 0;}
+"while/"            {return WHILE; currCol += yyleng;}
+"do/"               {return DO; currCol += yyleng;}
 " "					currCol++;
 (\*\/)(.|\n)*(\/\*)
 "*".*
 "\n"                {printf("NEWLINE\n"); currLine += yyleng; currCol = 0;}
-"while/"            {printf("WHILE/\n"); currCol += yyleng;}
-"do/"               {printf("DO/(WHILE)\n"); currCol += yyleng;}
 
-{DIGIT}+            {printf("INT %d\n", atoi(yytext));}
-{IDENTIFIER}	    {printf("IDENT %s\n", yytext); currCol += yyleng;}
-(add\/)|(sub\/)|(mul\/)|(div\/)        {printf("ARITHMETIC OP: %s\n", yytext); currCol += yyleng;}
-(lth\/)|(gth\/)|(eqt\/)|(lte\/)|(gte\/)|(neq\/)        {printf("RELATIONAL OP: %s\n", yytext); currCol += yyleng;}
+{DIGIT}+            {return NUM;}
+{IDENTIFIER}	    {return IDENT; currCol += yyleng;}
+"add/"              {return ADD; currCol += yyleng;}
+"sub/"              {return SUB; currCol += yyleng;}
+"mul/"              {return MUL; currCol += yyleng;}
+"div/"              {return DIV; currCol += yyleng;}
+"lth/"              {return LESS_THAN; currCol += yyleng;}
+"gth/"              {return GREATER_THEN; currCol += yyleng;}
+"eqt/"              {return EQUAL_TO; currCol += yyleng;}
+"lte/"              {return LESS_EQUAL_TO; currCol += yyleng;}
+"gte/"              {return GREATER_EQUAL_TO; currCol += yyleng;}
+"neq/"              {return NOT_EQUAL_TO; currCol += yyleng;}
+
 ({DIGIT}|{UNDERSCORE})+{IDENTIFIER}			{printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", currLine, currCol, yytext); exit(0);}
 {IDENTIFIER}{UNDERSCORE}+                   {printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", currLine, currCol, yytext); exit(0);}
-{FUNCTION}	    {printf("FUNCTION %s\n", yytext); currCol += yyleng;}
+{FUNCTION}	    {return FUNCTION; currCol += yyleng;}
 
 [ \t\r]     /* NOP */
 .                   {printf("Error at line %d. column %d: unrecognized symbol \"%s\"\n", currLine, currCol, yytext);}
