@@ -24,26 +24,26 @@ UNDERSCORE [_]
 
 
 
-"["                 {printf("Left Square Bracket \n");}
-"]"                 {printf("Right Square Bracket \n");}
-"{"                 {printf("Left Curly Brace \n");}
-"}"                 {printf("Right Curly Brace \n");}
-","                 {printf("Comma \n");}
+"["                 {return L_SQUARE;}
+"]"                 {return R_SQUARE;}
+"{"                 {return L_CURLY;}
+"}"                 {return R_CURLY;}
+","                 {return COMMA;}
 
-"("                 {printf("Left Parenthesis \n");}
-")"                 {printf("Right Parenthesis \n");}
+"("                 {return L_PAREN;}
+")"                 {return R_PAREN;}
 
-"="                 {printf("Assignment: %s\n", yytext);}
-";" 				{printf("SEMICOLON\n"); currCol += yyleng;}
+"="                 {return EQL;}
+";" 				{return SEMI;}
 
 
-"break/"            {printf("Break statement: %s\n", yytext); currCol += yyleng;}
-"if/"               {printf("IF/\n"); currCol += yyleng;}
-"else/"             {printf("ELSE/\n"); currCol += yyleng;}
-"elseif/"           {printf("ELSEIF/\n"); currCol += yyleng;}
-"in/"               {printf("IN/\n"); currCol += yyleng;}
-"out/"              {printf("OUT/\n"); currCol += yyleng;}
-"print/"            {printf("PRINT/\n"); currCol += yyleng;}
+"break/"            {return BREAK;}
+"if/"               {return IF;}
+"else/"             {return ELSE;}
+"elseif/"           {return ELIF;}
+"in/"               {return IN;}
+"out/"              {return OUT;}
+"print/"            {return PRINT;}
 
 "\n"                currLine++; currCol = 0;
 "while/"            {printf("WHILE/\n"); currCol += yyleng;}
