@@ -9,7 +9,7 @@
 
 /* %define parse.error  */
 
-%left VAR FUNCTION NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA EQL SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO ADD SUB MUL DIV LESS_THAN GREATER_THAN EQUAL_TO LESS_EQUAL_TO GREATER_EQUAL_TO NOT_EQUAL_TO
+%left VAR FUNCTION NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA EQL SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO ADD SUB MUL DIV LESS_THAN GREATER_THAN EQUAL_TO LESS_EQUAL_TO GREATER_EQUAL_TO NOT_EQUAL_TO ASSIGN
 
 
 %start program
@@ -30,28 +30,28 @@ stmt: stmt stmt {printf("stmt -> stmt stmt\n");}
 | %empty {printf("stmt -> epsilon");}
 
 assignment: VAR LH_ID {printf("assignment -> VAR LH_ID");}
-| VAR LH_ID = rel_exp {printf("assignment -> VAR LH_ID = rel_exp";)}
-| VAR LH_ID = ID {printf("assignment -> VAR LH_ID = ID");}
+| VAR LH_ID ASSIGN rel_exp {printf("assignment -> VAR LH_ID = rel_exp";)}
+| VAR LH_ID ASSIGN ID {printf("assignment -> VAR LH_ID = ID");}
 
 function: VAR ID (arg) { stmt }
 
 arg: VAR ID
-| VAR ID, arg
+| VAR ID COMMA arg
 
 break: BREAK {printf("break/");}
 
 read_write_stmt: IF ID {printf("read_write_stmt -> in/ ID");}
 | OUT ID {printf("read_write_stmt -> out/ ID");}
-| PRINT (“ ID “) {printf("");}
+| PRINT L_PAREN “ ID “ R_PAREN {printf("");}
 
-if: IF (rel_exp) { stmt } elseif
-| IF (rel_exp) {stmt} ELIF ELSE {stmt} 
+if: IF L_PAREN rel_exp R_PAREN { stmt } elseif
+| IF L_PAREN rel_exp R_PAREN {stmt} ELIF ELSE {stmt} 
 
-while: WHILE (rel_ex) {stmt}
-| DO {stmt} WHILE(expr)
+while: WHILE L_PAREN rel_ex R_PAREN {stmt}
+| DO {stmt} WHILE L_PAREN expr R_PAREN
 
 elseif: %empty {printf("elseif -> epsilon");}
-| ELIF (rel_exp) { stmt } ELIF
+| ELIF L_PAREN rel_exp R_PAREN { stmt } ELIF
 
 rel_exp: ID { $$ = $1; }
 | add_exp { $$ = $1; }
