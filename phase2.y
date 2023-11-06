@@ -9,11 +9,9 @@
 
 /* %define parse.error  */
 
-%token NUM 
+%token 
 
-%left ADD SUB MUL DIV EQ
-
-%right LESS_THAN GREATER_THAN
+%left 
 
 %union {
     int num;
