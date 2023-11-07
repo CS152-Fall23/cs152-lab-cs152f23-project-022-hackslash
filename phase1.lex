@@ -36,37 +36,37 @@ UNDERSCORE [_]
 ")"                 {return R_PAREN;}
 
 "="                 {return EQL;}
-";" 				{return SEMI; currCol += yyleng;}
+";" 				{currCol += yyleng; return SEMI;}
 
 
-"break/"            {return BREAK; currCol += yyleng;}
-"if/"               {return IF; currCol += yyleng;}
-"else/"             {return ELSE; currCol += yyleng;}
-"elseif/"           {return ELIF; currCol += yyleng;}
-"in/"               {return IN; currCol += yyleng;}
-"out/"              {return OUT; currCol += yyleng;}
-"print/"            {return PRINT; currCol += yyleng;}
+"break/"            {currCol += yyleng; return BREAK;}
+"if/"               {currCol += yyleng; return IF;}
+"else/"             {currCol += yyleng; return ELSE;}
+"elseif/"           {currCol += yyleng; return ELIF;}
+"in/"               {currCol += yyleng; return IN;}
+"out/"              {currCol += yyleng; return OUT;}
+"print/"            {currCol += yyleng; return PRINT;}
 
 "\n"                {currLine++; currCol = 0;}
-"while/"            {return WHILE; currCol += yyleng;}
-"do/"               {return DO; currCol += yyleng;}
+"while/"            {currCol += yyleng; return WHILE;}
+"do/"               {currCol += yyleng; return DO;}
 " "					currCol++;
 (\*\/)(.|\n)*(\/\*)
 "*".*
 "\n"                {printf("NEWLINE\n"); currLine += yyleng; currCol = 0;}
 
 {DIGIT}+            {return NUM;}
-{IDENTIFIER}	    {return IDENT; currCol += yyleng;}
-"add/"              {return ADD; currCol += yyleng;}
-"sub/"              {return SUB; currCol += yyleng;}
-"mul/"              {return MUL; currCol += yyleng;}
-"div/"              {return DIV; currCol += yyleng;}
-"lth/"              {return LESS_THAN; currCol += yyleng;}
-"gth/"              {return GREATER_THEN; currCol += yyleng;}
-"eqt/"              {return EQUAL_TO; currCol += yyleng;}
-"lte/"              {return LESS_EQUAL_TO; currCol += yyleng;}
-"gte/"              {return GREATER_EQUAL_TO; currCol += yyleng;}
-"neq/"              {return NOT_EQUAL_TO; currCol += yyleng;}
+{IDENTIFIER}	    {currCol += yyleng; return IDENT;}
+"add/"              {currCol += yyleng; return ADD;}
+"sub/"              {currCol += yyleng; return SUB;}
+"mul/"              {currCol += yyleng; return MUL;}
+"div/"              {currCol += yyleng; return DIV;}
+"lth/"              {currCol += yyleng; return LESS_THAN;}
+"gth/"              {currCol += yyleng; return GREATER_THEN;}
+"eqt/"              {currCol += yyleng; return EQUAL_TO;}
+"lte/"              {currCol += yyleng; return LESS_EQUAL_TO;}
+"gte/"              {currCol += yyleng; return GREATER_EQUAL_TO;}
+"neq/"              {currCol += yyleng; return NOT_EQUAL_TO;}
 
 ({DIGIT}|{UNDERSCORE})+{IDENTIFIER}			{printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", currLine, currCol, yytext); exit(0);}
 {IDENTIFIER}{UNDERSCORE}+                   {printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", currLine, currCol, yytext); exit(0);}
