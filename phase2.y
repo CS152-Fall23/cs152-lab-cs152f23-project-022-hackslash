@@ -9,9 +9,9 @@
 
 /* %define parse.error  */
 
-%token VAR FUNCTION NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO ADD SUB MUL DIV LH_ID
+%token VAR FUNCTION NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO LH_ID
 %left ADD SUB
-%left MULT DIV
+%left MUL DIV
 %left LESS_THAN GREATER_THAN EQUAL_TO LESS_EQUAL_TO GREATER_EQUAL_TO NOT_EQUAL_TO EQL
 
 %start program
@@ -46,14 +46,13 @@ read_write_stmt: IN IDENT {printf("read_write_stmt -> in/ ID");}
 | OUT IDENT {printf("read_write_stmt -> out/ IDENT");}
 | PRINT L_SQUARE IDENT R_SQUARE {printf("IDENT");}
 
-if_stmt: IF L_SQUARE rel_exp R_SQUARE  stmt  elseif
-| IF L_SQUARE rel_exp R_SQUARE stmt ELIF ELSE stmt 
+if_stmt: IF L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY elseif {printf("if_stmt -> IF[rel_exp]{stmt} ");}
 
-while_stmt: WHILE L_SQUARE rel_exp R_SQUARE {stmt}
-| DO stmt WHILE L_SQUARE exp R_SQUARE
+while_stmt: WHILE L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY {printf("while_stmt -> WHILE[rel_exp]{stmt}");}
+| DO L_CURLY stmt R_CURLY WHILE L_SQUARE exp R_SQUARE {printf("while_stmt -> DO{stmt}WHILE[rel_exp]");}
 
-elseif: %empty {printf("elseif -> epsilon");}
-| ELIF L_SQUARE rel_exp R_SQUARE { stmt } ELIF
+elseif: ELSE L_CURLY stmt R_CURLY {printf("elseif -> ELSE{stmt}");}
+| ELIF L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY elseif {printf("elseif -> ELSEIF[rel_exp]{stmt}elseif");}
 
 rel_exp: IDENT { $$ = $1; }
 | add_exp { $$ = $1; }
