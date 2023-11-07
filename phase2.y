@@ -89,12 +89,12 @@ rel: rel_exp LESS_THAN rel_exp {printf("rel -> rel_exp LESS_THAN rel_exp"); }
 | L_SQUARE add_exp R_SQUARE { printf("rel -> L_PAREN add_exp R_PAREN"); }
 
 
-var: INT { printf("INT"); }
-| STRING { printf("STRING"); }
-| DOUBLE { printf("DOUBLE"); }
-| CHAR { printf("CHAR"); }
-| BOOL { printf("BOOL"); }
-| VOID { printf("VOID"); }
+var: INT { printf("var -> INT"); }
+| STRING { printf("var -> STRING"); }
+| DOUBLE { printf("var -> DOUBLE"); }
+| CHAR { printf("var -> CHAR"); }
+| BOOL { printf("var -> BOOL"); }
+| VOID { printf("var -> VOID"); }
 
 
 
