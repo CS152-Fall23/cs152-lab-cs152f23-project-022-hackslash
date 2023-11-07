@@ -9,10 +9,10 @@
 
 /* %define parse.error  */
 
-%token VAR FUNCTION NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA EQL SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO ADD SUB MUL DIV LH_ID
+%token VAR FUNCTION NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO ADD SUB MUL DIV LH_ID
 %left ADD SUB
 %left MULT DIV
-%left LESS_THAN GREATER_THAN EQUAL_TO LESS_EQUAL_TO GREATER_EQUAL_TO NOT_EQUAL_TO ASSIGN
+%left LESS_THAN GREATER_THAN EQUAL_TO LESS_EQUAL_TO GREATER_EQUAL_TO NOT_EQUAL_TO EQL
 
 %start program
 
@@ -32,8 +32,8 @@ stmt: stmt stmt {printf("stmt -> stmt stmt\n");}
 | %empty {printf("stmt -> epsilon");}
 
 assignment: VAR LH_ID {printf("assignment -> VAR LH_ID");}
-| VAR LH_ID ASSIGN rel_exp {printf("assignment -> VAR LH_ID = rel_exp");}
-| VAR LH_ID ASSIGN IDENT {printf("assignment -> VAR LH_ID = IDENT");}
+| VAR LH_ID EQL rel_exp {printf("assignment -> VAR LH_ID = rel_exp");}
+| VAR LH_ID EQL IDENT {printf("assignment -> VAR LH_ID = IDENT");}
 
 function: VAR IDENT L_PAREN arg R_PAREN { stmt }
 
