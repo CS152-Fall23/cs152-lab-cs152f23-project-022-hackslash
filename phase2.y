@@ -42,7 +42,7 @@ arg: VAR IDENT
 
 break: BREAK {printf("break/");}
 
-read_write_stmt: IF IDENT {printf("read_write_stmt -> in/ ID");}
+read_write_stmt: IN IDENT {printf("read_write_stmt -> in/ ID");}
 | OUT IDENT {printf("read_write_stmt -> out/ IDENT");}
 | PRINT L_PAREN IDENT R_PAREN {printf("IDENT");}
 
