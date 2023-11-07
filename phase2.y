@@ -9,11 +9,14 @@
 
 /* %define parse.error  */
 
-%token VAR FUNCTION NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO ADD SUB MUL DIV LH_ID
+%token VAR FUNCTION NUM IDENT L_CURLY L_PAREN R_CURLY R_PAREN COMMA SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO LH_ID
 %left ADD SUB
-%left MULT DIV
+%left MUL DIV
 %left LESS_THAN GREATER_THAN EQUAL_TO LESS_EQUAL_TO GREATER_EQUAL_TO NOT_EQUAL_TO EQL
-
+%left R_SQUARE L_SQUARE
+%union{
+    int num;
+}
 %start program
 
 
@@ -23,7 +26,7 @@ program: %empty {printf("program -> epsilon");}
 | program stmt{printf("program -> stmt");}
 
 stmt: stmt stmt {printf("stmt -> stmt stmt\n");}
-| assignment {printf("stmt -> assignment";)}
+| assignment {printf("stmt -> assignment");}
 | function {printf("stmt -> function");}
 | break {printf("stmt -> break");}
 | read_write_stmt {printf("stmt -> read_write_stmt");}
@@ -59,9 +62,9 @@ rel_exp: IDENT { $$ = $1; }
 | add_exp { $$ = $1; }
 | rel { $$ = $1; }
 
-add_exp: mul_exp { $$ = $1; }
-| add_exp ADD add_exp { $$ = $1 + $3; } 
-| add_exp SUB add_exp { $$ = $1 - $3; }
+add_exp: mul_exp {printf("add_exp -> mul_exp");}
+| add_exp ADD add_exp {printf("add_exp -> add_exp ADD add_exp");} 
+| add_exp SUB add_exp {printf("add_exp -> add_exp SUB add_exp");}
 
 mul_exp: exp { $$ = $1; }
 | mul_exp MUL mul_exp { $$ = $1 * $3; } 
