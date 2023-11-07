@@ -9,9 +9,9 @@
 
 /* %define parse.error  */
 
-%token VAR FUNCTION NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO ADD SUB MUL DIV LH_ID
+%token VAR FUNCTION NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO LH_ID
 %left ADD SUB
-%left MULT DIV
+%left MUL DIV
 %left LESS_THAN GREATER_THAN EQUAL_TO LESS_EQUAL_TO GREATER_EQUAL_TO NOT_EQUAL_TO EQL
 
 %start program
@@ -55,9 +55,9 @@ while_stmt: WHILE L_SQUARE rel_exp R_SQUARE {stmt}
 elseif: %empty {printf("elseif -> epsilon");}
 | ELIF L_SQUARE rel_exp R_SQUARE { stmt } ELIF
 
-rel_exp: IDENT { $$ = $1; }
-| add_exp { $$ = $1; }
-| rel { $$ = $1; }
+rel_exp: IDENT {printf("rel_exp -> IDENT");}
+| add_exp {printf("rel_exp -> add_exp"); }
+| rel {printf("rel_exp -> rel"); }
 
 add_exp: mul_exp { $$ = $1; }
 | add_exp ADD add_exp { $$ = $1 + $3; } 
@@ -72,13 +72,13 @@ exp: NUM { $$ = $1; }
 | L_PAREN add_exp R_PAREN { $$ = $2; }
 
 
-rel: rel_exp LESS_THAN rel_exp { $$ = $1 < $3; } 
-| rel_exp GREATER_THAN rel_exp { $$ = $1 > $3; } 
-| rel_exp EQUAL_TO rel_exp { $$ = $1 == $3; } 
-| rel_exp LESS_EQUAL_TO rel_exp { $$ = $1 <= $3; } 
-| rel_exp GREATER_EQUAL_TO rel_exp { $$ = $1 >= $3; } 
-| rel_exp NOT_EQUAL_TO rel_exp { $$ = $1 != $3; } 
-| L_PAREN add_exp R_PAREN { $$ = $2; }
+rel: rel_exp LESS_THAN rel_exp {printf("rel -> rel_exp LESS_THAN rel_exp"); } 
+| rel_exp GREATER_THAN rel_exp {printf("rel -> rel_exp GREATER_THAN rel_exp"); } 
+| rel_exp EQUAL_TO rel_exp { printf("rel -> rel_exp EQUAL_TO rel_exp"); } 
+| rel_exp LESS_EQUAL_TO rel_exp { printf("rel -> rel_exp LESS_EQUAL_TO rel_exp"); } 
+| rel_exp GREATER_EQUAL_TO rel_exp { printf("rel -> rel_exp GREATER_EQUAL_TO rel_exp");} 
+| rel_exp NOT_EQUAL_TO rel_exp { printf("rel -> rel_exp NOT_EQUAL_TO rel_exp");} 
+| L_SQUARE add_exp R_SQUARE { printf("rel -> L_PAREN add_exp R_PAREN"); }
 
 /*
 VAR:
