@@ -33,14 +33,14 @@ stmt: stmt stmt {printf("stmt -> stmt stmt\n");}
 | while_stmt {printf("stmt -> while_stmt\n");}
 | %empty {printf("stmt -> epsilon\n");}
 
-assignment: VAR LH_ID {printf("assignment -> VAR LH_ID\n");}
-| VAR LH_ID EQL rel_exp {printf("assignment -> VAR LH_ID = rel_exp\n");}
-| VAR LH_ID EQL IDENT {printf("assignment -> VAR LH_ID = IDENT\n");}
+assignment: var LH_ID {printf("assignment -> var LH_ID\n");}
+| var LH_ID EQL rel_exp {printf("assignment -> var LH_ID = rel_exp\n");}
+| var LH_ID EQL IDENT {printf("assignment -> var LH_ID = IDENT\n");}
 
-function: VAR IDENT L_SQUARE arg R_SQUARE { stmt }
+function: var IDENT L_SQUARE arg R_SQUARE { stmt }
 
-arg: VAR IDENT {printf("arg -> VAR IDENT\n");}
-| VAR IDENT COMMA arg {printf("arg -> VAR IDENT,arg\n");}
+arg: var IDENT {printf("arg -> var IDENT\n");}
+| var IDENT COMMA arg {printf("arg -> var IDENT,arg\n");}
 
 break: BREAK {printf("break -> break/\n");}
 
