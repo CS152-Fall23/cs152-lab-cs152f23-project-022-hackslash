@@ -46,14 +46,13 @@ read_write_stmt: IN IDENT {printf("read_write_stmt -> in/ ID");}
 | OUT IDENT {printf("read_write_stmt -> out/ IDENT");}
 | PRINT L_SQUARE IDENT R_SQUARE {printf("IDENT");}
 
-if_stmt: IF L_SQUARE rel_exp R_SQUARE  stmt  elseif
-| IF L_SQUARE rel_exp R_SQUARE stmt ELIF ELSE stmt 
+if_stmt: IF L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY elseif {printf("if_stmt -> IF[rel_exp]{stmt} ");}
 
-while_stmt: WHILE L_SQUARE rel_exp R_SQUARE {stmt}
-| DO stmt WHILE L_SQUARE exp R_SQUARE
+while_stmt: WHILE L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY {printf("while_stmt -> WHILE[rel_exp]{stmt}");}
+| DO L_CURLY stmt R_CURLY WHILE L_SQUARE exp R_SQUARE {printf("while_stmt -> DO{stmt}WHILE[rel_exp]");}
 
-elseif: %empty {printf("elseif -> epsilon");}
-| ELIF L_SQUARE rel_exp R_SQUARE { stmt } ELIF
+elseif: ELSE L_CURLY stmt R_CURLY {printf("elseif -> ELSE{stmt}");}
+| ELIF L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY elseif {printf("elseif -> ELSEIF[rel_exp]{stmt}elseif");}
 
 rel_exp: IDENT {printf("rel_exp -> IDENT");}
 | add_exp {printf("rel_exp -> add_exp"); }
@@ -80,15 +79,14 @@ rel: rel_exp LESS_THAN rel_exp {printf("rel -> rel_exp LESS_THAN rel_exp"); }
 | rel_exp NOT_EQUAL_TO rel_exp { printf("rel -> rel_exp NOT_EQUAL_TO rel_exp");} 
 | L_SQUARE add_exp R_SQUARE { printf("rel -> L_PAREN add_exp R_PAREN"); }
 
-/*
-VAR:
-int/ { $$ = int/ $1; }
-| string/ { $$ = string/ $1; }
-| double/ { $$ = double/ $1; }
-| char/ { $$ = char/ $1; }
-| bool/ { $$ = bool/ $1; }
-| void/ { $$ = void/ $1; }
-*/ 
+
+var: "int/" { printf("INT"); }
+| "string/" { printf("STRING"); }
+| "double/" { printf("DOUBLE"); }
+| "char/" { printf("CHAR"); }
+| "bool/" { printf("BOOL"); }
+| "void/" { printf("VOID"); }
+
 
 
 %%
