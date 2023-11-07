@@ -9,16 +9,17 @@
 
 /* %define parse.error  */
 
-%left VAR FUNCTION NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA EQL SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO ADD SUB MUL DIV LESS_THAN GREATER_THAN EQUAL_TO LESS_EQUAL_TO GREATER_EQUAL_TO NOT_EQUAL_TO ASSIGN
-
+%token VAR FUNCTION NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA EQL SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO ADD SUB MUL DIV LESS_THAN GREATER_THAN EQUAL_TO LESS_EQUAL_TO GREATER_EQUAL_TO NOT_EQUAL_TO ASSIGN LH_ID
+%left ADD SUB
+%left MULT DIV
 
 %start program
 
 
 %%
 /* grammar */
-program: stmt{}
-| program stmt{}
+program: %empty {printf("program -> epsilon");}
+| program stmt{printf("program -> stmt");}
 
 stmt: stmt stmt {printf("stmt -> stmt stmt\n");}
 | assignment {printf("stmt -> assignment";)}
@@ -30,30 +31,30 @@ stmt: stmt stmt {printf("stmt -> stmt stmt\n");}
 | %empty {printf("stmt -> epsilon");}
 
 assignment: VAR LH_ID {printf("assignment -> VAR LH_ID");}
-| VAR LH_ID ASSIGN rel_exp {printf("assignment -> VAR LH_ID = rel_exp";)}
-| VAR LH_ID ASSIGN ID {printf("assignment -> VAR LH_ID = ID");}
+| VAR LH_ID ASSIGN rel_exp {printf("assignment -> VAR LH_ID = rel_exp");}
+| VAR LH_ID ASSIGN IDENT {printf("assignment -> VAR LH_ID = IDENT");}
 
-function: VAR ID (arg) { stmt }
+function: VAR IDENT L_PAREN arg R_PAREN { stmt }
 
-arg: VAR ID
-| VAR ID COMMA arg
+arg: VAR IDENT
+| VAR IDENT COMMA arg
 
 break: BREAK {printf("break/");}
 
-read_write_stmt: IF ID {printf("read_write_stmt -> in/ ID");}
-| OUT ID {printf("read_write_stmt -> out/ ID");}
-| PRINT L_PAREN “ ID “ R_PAREN {printf("");}
+read_write_stmt: IF IDENT {printf("read_write_stmt -> in/ ID");}
+| OUT IDENT {printf("read_write_stmt -> out/ IDENT");}
+| PRINT L_PAREN IDENT R_PAREN {printf("IDENT");}
 
-if: IF L_PAREN rel_exp R_PAREN { stmt } elseif
-| IF L_PAREN rel_exp R_PAREN {stmt} ELIF ELSE {stmt} 
+if_stmt: IF L_PAREN rel_exp R_PAREN  stmt  elseif
+| IF L_PAREN rel_exp R_PAREN stmt ELIF ELSE stmt 
 
-while: WHILE L_PAREN rel_ex R_PAREN {stmt}
-| DO {stmt} WHILE L_PAREN expr R_PAREN
+while_stmt: WHILE L_PAREN rel_exp R_PAREN {stmt}
+| DO stmt WHILE L_PAREN exp R_PAREN
 
 elseif: %empty {printf("elseif -> epsilon");}
 | ELIF L_PAREN rel_exp R_PAREN { stmt } ELIF
 
-rel_exp: ID { $$ = $1; }
+rel_exp: IDENT { $$ = $1; }
 | add_exp { $$ = $1; }
 | rel { $$ = $1; }
 
@@ -71,7 +72,7 @@ exp: NUM { $$ = $1; }
 
 
 rel: rel_exp LESS_THAN rel_exp { $$ = $1 < $3; } 
-| rel_exp GREATER_THAN { $$ = $1 > $3; } 
+| rel_exp GREATER_THAN rel_exp { $$ = $1 > $3; } 
 | rel_exp EQUAL_TO rel_exp { $$ = $1 == $3; } 
 | rel_exp LESS_EQUAL_TO rel_exp { $$ = $1 <= $3; } 
 | rel_exp GREATER_EQUAL_TO rel_exp { $$ = $1 >= $3; } 
@@ -88,8 +89,6 @@ int/ { $$ = int/ $1; }
 | void/ { $$ = void/ $1; }
 */ 
 
-
-   program: 
 
 %%
 
