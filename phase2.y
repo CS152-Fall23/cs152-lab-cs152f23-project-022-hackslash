@@ -59,9 +59,6 @@ elseif: ELSE L_CURLY stmt R_CURLY {printf("elseif -> ELSE{stmt}\n");}
 rel_exp: IDENT {printf("rel_exp -> IDENT\n");}
 | add_exp {printf("rel_exp -> add_exp\n"); }
 | rel {printf("rel_exp -> rel\n"); }
-rel_exp: IDENT { printf("rel_exp -> IDENT\n"); }
-| add_exp { printf("rel_exp -> add_exp\n"); }
-| rel { printf("rel_exp -> rel\n"); }
 
 add_exp: mul_exp {printf("add_exp -> mul_exp\n");}
 | add_exp ADD add_exp {printf("add_exp -> add_exp ADD add_exp\n");} 
