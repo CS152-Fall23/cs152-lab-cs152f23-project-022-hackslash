@@ -9,7 +9,7 @@
 
 /* %define parse.error  */
 
-%token VAR FUNCTION NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO LH_ID
+%token VAR FUNCTION NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO LH_ID INT STRING CHAR DOUBLE BOOL VOID
 %left ADD SUB
 %left MUL DIV
 %left LESS_THAN GREATER_THAN EQUAL_TO LESS_EQUAL_TO GREATER_EQUAL_TO NOT_EQUAL_TO EQL
@@ -57,9 +57,9 @@ while_stmt: WHILE L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY {printf("while_
 elseif: ELSE L_CURLY stmt R_CURLY {printf("elseif -> ELSE{stmt}");}
 | ELIF L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY elseif {printf("elseif -> ELSEIF[rel_exp]{stmt}elseif");}
 
-rel_exp: IDENT { $$ = $1; }
-| add_exp { $$ = $1; }
-| rel { $$ = $1; }
+rel_exp: IDENT { printf("rel_exp -> IDENT"); }
+| add_exp { printf("rel_exp -> add_exp"); }
+| rel { printf("rel_exp -> rel"); }
 
 add_exp: mul_exp { $$ = $1; }
 | add_exp ADD add_exp { $$ = $1 + $3; } 
@@ -83,12 +83,12 @@ rel: rel_exp LESS_THAN rel_exp { $$ = $1 < $3; }
 | L_PAREN rel_exp R_PAREN { $$ = $2; }
 
 
-var: "int/" { printf("INT"); }
-| "string/" { printf("STRING"); }
-| "double/" { printf("DOUBLE"); }
-| "char/" { printf("CHAR"); }
-| "bool/" { printf("BOOL"); }
-| "void/" { printf("VOID"); }
+var: INT { printf("INT"); }
+| STRING { printf("STRING"); }
+| DOUBLE { printf("DOUBLE"); }
+| CHAR { printf("CHAR"); }
+| BOOL { printf("BOOL"); }
+| VOID { printf("VOID"); }
 
 
 
