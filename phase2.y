@@ -13,7 +13,10 @@
 %left ADD SUB
 %left MUL DIV
 %left LESS_THAN GREATER_THAN EQUAL_TO LESS_EQUAL_TO GREATER_EQUAL_TO NOT_EQUAL_TO EQL
-
+%left R_SQUARE L_SQUARE
+%union{
+    int num;
+}
 %start program
 
 %union{
@@ -26,7 +29,7 @@ program: %empty {printf("program -> epsilon");}
 | program stmt{printf("program -> stmt");}
 
 stmt: stmt stmt {printf("stmt -> stmt stmt\n");}
-| assignment {printf("stmt -> assignment";)}
+| assignment {printf("stmt -> assignment");}
 | function {printf("stmt -> function");}
 | break {printf("stmt -> break");}
 | read_write_stmt {printf("stmt -> read_write_stmt");}
@@ -57,13 +60,16 @@ while_stmt: WHILE L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY {printf("while_
 elseif: ELSE L_CURLY stmt R_CURLY {printf("elseif -> ELSE{stmt}");}
 | ELIF L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY elseif {printf("elseif -> ELSEIF[rel_exp]{stmt}elseif");}
 
+rel_exp: IDENT {printf("rel_exp -> IDENT");}
+| add_exp {printf("rel_exp -> add_exp"); }
+| rel {printf("rel_exp -> rel"); }
 rel_exp: IDENT { printf("rel_exp -> IDENT"); }
 | add_exp { printf("rel_exp -> add_exp"); }
 | rel { printf("rel_exp -> rel"); }
 
-add_exp: mul_exp { $$ = $1; }
-| add_exp ADD add_exp { $$ = $1 + $3; } 
-| add_exp SUB add_exp { $$ = $1 - $3; }
+add_exp: mul_exp {printf("add_exp -> mul_exp");}
+| add_exp ADD add_exp {printf("add_exp -> add_exp ADD add_exp");} 
+| add_exp SUB add_exp {printf("add_exp -> add_exp SUB add_exp");}
 
 mul_exp: exp { $$ = $1; }
 | mul_exp MUL mul_exp { $$ = $1 * $3; } 
@@ -74,13 +80,13 @@ exp: NUM { $$ = $1; }
 | L_PAREN add_exp R_PAREN { $$ = $2; }
 
 
-rel: rel_exp LESS_THAN rel_exp { $$ = $1 < $3; } 
-| rel_exp GREATER_THAN rel_exp { $$ = $1 > $3; } 
-| rel_exp EQUAL_TO rel_exp { $$ = $1 == $3; } 
-| rel_exp LESS_EQUAL_TO rel_exp { $$ = $1 <= $3; } 
-| rel_exp GREATER_EQUAL_TO rel_exp { $$ = $1 >= $3; } 
-| rel_exp NOT_EQUAL_TO rel_exp { $$ = $1 != $3; } 
-| L_PAREN rel_exp R_PAREN { $$ = $2; }
+rel: rel_exp LESS_THAN rel_exp {printf("rel -> rel_exp LESS_THAN rel_exp"); } 
+| rel_exp GREATER_THAN rel_exp {printf("rel -> rel_exp GREATER_THAN rel_exp"); } 
+| rel_exp EQUAL_TO rel_exp { printf("rel -> rel_exp EQUAL_TO rel_exp"); } 
+| rel_exp LESS_EQUAL_TO rel_exp { printf("rel -> rel_exp LESS_EQUAL_TO rel_exp"); } 
+| rel_exp GREATER_EQUAL_TO rel_exp { printf("rel -> rel_exp GREATER_EQUAL_TO rel_exp");} 
+| rel_exp NOT_EQUAL_TO rel_exp { printf("rel -> rel_exp NOT_EQUAL_TO rel_exp");} 
+| L_SQUARE add_exp R_SQUARE { printf("rel -> L_PAREN add_exp R_PAREN"); }
 
 
 var: INT { printf("INT"); }
