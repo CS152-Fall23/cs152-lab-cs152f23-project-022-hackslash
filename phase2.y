@@ -64,13 +64,13 @@ add_exp: mul_exp {printf("add_exp -> mul_exp\n");}
 | add_exp ADD add_exp {printf("add_exp -> add_exp ADD add_exp\n");} 
 | add_exp SUB add_exp {printf("add_exp -> add_exp SUB add_exp\n");}
 
-mul_exp: exp { $$ = $1; }
-| mul_exp MUL mul_exp { $$ = $1 * $3; } 
-| mul_exp DIV mul_exp { $$ = $1 / $3; } 
+mul_exp: exp {printf("mul_exp -> exp\n");}
+| mul_exp MUL mul_exp {printf("mul_exp -> mul_exp MUL mul_exp\n");} 
+| mul_exp DIV mul_exp {printf("mul_exp -> mul_exp DIV mul_exp\n");} 
 
-exp: NUM { $$ = $1; } 
-| SUB exp { $$ = -$1; }
-| L_PAREN add_exp R_PAREN { $$ = $2; }
+exp: NUM {printf("exp -> NUM\n");} 
+| SUB exp {printf("exp -> SUB exp\n");}
+| L_PAREN add_exp R_PAREN {printf("exp -> L_PAREN add_exp R_PAREN\n");}
 
 
 rel: rel_exp LESS_THAN rel_exp {printf("rel -> rel_exp LESS_THAN rel_exp\n"); } 
