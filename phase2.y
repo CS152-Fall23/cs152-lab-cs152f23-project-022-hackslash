@@ -37,7 +37,7 @@ assignment: var LH_ID {printf("assignment -> var LH_ID\n");}
 | var LH_ID EQL rel_exp {printf("assignment -> var LH_ID = rel_exp\n");}
 | var LH_ID EQL IDENT {printf("assignment -> var LH_ID = IDENT\n");}
 
-function: var IDENT L_SQUARE arg R_SQUARE { stmt }
+function: var IDENT L_SQUARE arg R_SQUARE L_CURLY stmt R_CURLY {printf("function -> var IDENT[arg]{stmt}");}
 
 arg: var IDENT {printf("arg -> var IDENT\n");}
 | var IDENT COMMA arg {printf("arg -> var IDENT,arg\n");}
