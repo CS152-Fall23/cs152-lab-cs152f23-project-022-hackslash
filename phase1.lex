@@ -7,7 +7,7 @@
     int currLine = 1;
     int currCol = 0;
 
-	#include "y.tab.c"
+	#include "phase2.tab.c"
 %}
 
 DIGIT[0-9]
@@ -53,7 +53,6 @@ UNDERSCORE [_]
 " "					currCol++;
 (\*\/)(.|\n)*(\/\*)
 "*".*
-"\n"                {printf("NEWLINE\n"); currLine += yyleng; currCol = 0;}
 
 {DIGIT}+            {return NUM;}
 {IDENTIFIER}	    {currCol += yyleng; return IDENT;}
