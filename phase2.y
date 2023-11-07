@@ -79,15 +79,14 @@ rel: rel_exp LESS_THAN rel_exp { $$ = $1 < $3; }
 | rel_exp NOT_EQUAL_TO rel_exp { $$ = $1 != $3; } 
 | L_PAREN add_exp R_PAREN { $$ = $2; }
 
-/*
-VAR:
-int/ { $$ = int/ $1; }
-| string/ { $$ = string/ $1; }
-| double/ { $$ = double/ $1; }
-| char/ { $$ = char/ $1; }
-| bool/ { $$ = bool/ $1; }
-| void/ { $$ = void/ $1; }
-*/ 
+
+var: "int/" { printf("INT"); }
+| "string/" { printf("STRING"); }
+| "double/" { printf("DOUBLE"); }
+| "char/" { printf("CHAR"); }
+| "bool/" { printf("BOOL"); }
+| "void/" { printf("VOID"); }
+
 
 
 %%
