@@ -124,18 +124,19 @@ extern int yydebug;
     PRINT = 276,
     WHILE = 277,
     DO = 278,
-    LH_ID = 279,
-    ADD = 280,
-    SUB = 281,
-    MUL = 282,
-    DIV = 283,
-    LESS_THAN = 284,
-    GREATER_THAN = 285,
-    EQUAL_TO = 286,
-    LESS_EQUAL_TO = 287,
-    GREATER_EQUAL_TO = 288,
-    NOT_EQUAL_TO = 289,
-    EQL = 290
+    ADD = 279,
+    SUB = 280,
+    MUL = 281,
+    DIV = 282,
+    LH_ID = 283,
+    MULT = 284,
+    LESS_THAN = 285,
+    GREATER_THAN = 286,
+    EQUAL_TO = 287,
+    LESS_EQUAL_TO = 288,
+    GREATER_EQUAL_TO = 289,
+    NOT_EQUAL_TO = 290,
+    EQL = 291
   };
 #endif
 
@@ -155,7 +156,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 159 "phase2.tab.c" /* yacc.c:358  */
+#line 160 "phase2.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -400,18 +401,18 @@ union yyalloc
 #define YYLAST   182
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  42
+#define YYNTOKENS  36
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  16
+#define YYNNTS  17
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  45
+#define YYNRULES  47
 /* YYNSTATES -- Number of states.  */
 #define YYNSTATES  102
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   296
+#define YYMAXUTOK   290
 
 #define YYTRANSLATE(YYX)                                                \
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -449,7 +450,7 @@ static const yytype_uint8 yytranslate[] =
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36,    37,    38,    39,    40,    41
+      35
 };
 
 #if YYDEBUG
@@ -458,9 +459,9 @@ static const yytype_uint8 yyrline[] =
 {
        0,    22,    22,    23,    25,    26,    27,    28,    29,    30,
       31,    32,    34,    35,    36,    38,    40,    41,    43,    45,
-      46,    47,    49,    51,    52,    54,    55,    57,    58,    59,
-      61,    62,    63,    65,    66,    67,    69,    70,    71,    74,
-      75,    76,    77,    78,    79,    80
+      46,    47,    49,    50,    52,    53,    55,    56,    56,    58,
+      59,    60,    62,    63,    64,    66,    67,    68,    70,    71,
+      72,    75,    76,    77,    78,    79,    80,    81
 };
 #endif
 
@@ -472,12 +473,11 @@ static const char *const yytname[] =
   "$end", "error", "$undefined", "VAR", "FUNCTION", "NUM", "IDENT",
   "L_CURLY", "L_PAREN", "L_SQUARE", "R_CURLY", "R_PAREN", "R_SQUARE",
   "COMMA", "SEMI", "BREAK", "IF", "ELIF", "ELSE", "IN", "OUT", "PRINT",
-  "WHILE", "DO", "LH_ID", "ADD", "SUB", "MUL", "DIV", "LESS_THAN",
+  "WHILE", "DO", "ADD", "SUB", "MUL", "DIV", "LH_ID", "MULT", "LESS_THAN",
   "GREATER_THAN", "EQUAL_TO", "LESS_EQUAL_TO", "GREATER_EQUAL_TO",
-  "NOT_EQUAL_TO", "EQL", "\"int/\"", "\"string/\"", "\"double/\"",
-  "\"char/\"", "\"bool/\"", "\"void/\"", "$accept", "program", "stmt",
-  "assignment", "function", "arg", "break", "read_write_stmt", "if_stmt",
-  "while_stmt", "elseif", "rel_exp", "add_exp", "mul_exp", "exp", "rel", YY_NULLPTR
+  "NOT_EQUAL_TO", "EQL", "$accept", "program", "stmt", "assignment",
+  "function", "arg", "break", "read_write_stmt", "if_stmt", "while_stmt",
+  "elseif", "rel_exp", "add_exp", "mul_exp", "exp", "rel", YY_NULLPTR
 };
 #endif
 
@@ -489,8 +489,7 @@ static const yytype_uint16 yytoknum[] =
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
      275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
-     285,   286,   287,   288,   289,   290,   291,   292,   293,   294,
-     295,   296
+     285,   286,   287,   288,   289,   290
 };
 # endif
 
@@ -499,14 +498,14 @@ static const yytype_uint16 yytoknum[] =
 #define yypact_value_is_default(Yystate) \
   (!!((Yystate) == (-32)))
 
-#define YYTABLE_NINF -28
+#define YYTABLE_NINF -30
 
 #define yytable_value_is_error(Yytable_value) \
   0
 
   /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
      STATE-NUM.  */
-static const yytype_int16 yypact[] =
+static const yytype_int8 yypact[] =
 {
      -32,    22,   -32,     2,   -32,    -2,     5,     8,    14,    31,
       10,   153,   -32,   -32,   -32,   -32,   -32,   -32,    53,    11,
@@ -634,9 +633,9 @@ static const yytype_uint8 yyr2[] =
 {
        0,     2,     0,     2,     2,     1,     1,     1,     1,     1,
        1,     0,     2,     4,     4,     5,     2,     4,     1,     2,
-       2,     4,     8,     7,     8,     4,     8,     1,     1,     1,
-       1,     3,     3,     1,     3,     3,     1,     2,     3,     3,
-       3,     3,     3,     3,     3,     3
+       2,     4,     6,     8,     4,     6,     0,     0,     6,     1,
+       1,     1,     1,     3,     3,     1,     3,     3,     1,     2,
+       3,     3,     3,     3,     3,     3,     3,     3
 };
 
 
@@ -1456,70 +1455,76 @@ yyreduce:
 #line 1457 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
-  case 28:
+  case 29:
 #line 58 "phase2.y" /* yacc.c:1646  */
     {printf("rel_exp -> add_exp"); }
 #line 1463 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
-  case 29:
+  case 30:
 #line 59 "phase2.y" /* yacc.c:1646  */
-    {printf("rel_exp -> rel"); }
-#line 1469 "phase2.tab.c" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]); }
+#line 1436 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
 #line 61 "phase2.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[0]); }
-#line 1475 "phase2.tab.c" /* yacc.c:1646  */
+#line 1442 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
-  case 31:
+  case 32:
 #line 62 "phase2.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]); }
+#line 1448 "phase2.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 33:
+#line 63 "phase2.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[-2]) + (yyvsp[0]); }
 #line 1481 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
-  case 32:
-#line 63 "phase2.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[-2]) - (yyvsp[0]); }
-#line 1487 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 33:
-#line 65 "phase2.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); }
-#line 1493 "phase2.tab.c" /* yacc.c:1646  */
-    break;
-
   case 34:
-#line 66 "phase2.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[-2]) * (yyvsp[0]); }
-#line 1499 "phase2.tab.c" /* yacc.c:1646  */
+#line 64 "phase2.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[-2]) - (yyvsp[0]); }
+#line 1460 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 67 "phase2.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[-2]) / (yyvsp[0]); }
-#line 1505 "phase2.tab.c" /* yacc.c:1646  */
+#line 66 "phase2.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]); }
+#line 1466 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 69 "phase2.y" /* yacc.c:1646  */
-    { (yyval) = (yyvsp[0]); }
-#line 1511 "phase2.tab.c" /* yacc.c:1646  */
+#line 67 "phase2.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[-2]) * (yyvsp[0]); }
+#line 1472 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 70 "phase2.y" /* yacc.c:1646  */
-    { (yyval) = -(yyvsp[-1]); }
-#line 1517 "phase2.tab.c" /* yacc.c:1646  */
+#line 68 "phase2.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[-2]) / (yyvsp[0]); }
+#line 1478 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
+#line 70 "phase2.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[0]); }
+#line 1484 "phase2.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 39:
 #line 71 "phase2.y" /* yacc.c:1646  */
+    { (yyval) = -(yyvsp[-1]); }
+#line 1490 "phase2.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 40:
+#line 72 "phase2.y" /* yacc.c:1646  */
     { (yyval) = (yyvsp[-1]); }
-#line 1523 "phase2.tab.c" /* yacc.c:1646  */
+#line 1496 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
@@ -1530,42 +1535,48 @@ yyreduce:
 
   case 40:
 #line 75 "phase2.y" /* yacc.c:1646  */
-    {printf("rel -> rel_exp GREATER_THAN rel_exp"); }
-#line 1535 "phase2.tab.c" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[-2]) < (yyvsp[0]); }
+#line 1502 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
 #line 76 "phase2.y" /* yacc.c:1646  */
-    { printf("rel -> rel_exp EQUAL_TO rel_exp"); }
-#line 1541 "phase2.tab.c" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[-2]) > (yyvsp[0]); }
+#line 1508 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
 #line 77 "phase2.y" /* yacc.c:1646  */
-    { printf("rel -> rel_exp LESS_EQUAL_TO rel_exp"); }
-#line 1547 "phase2.tab.c" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[-2]) == (yyvsp[0]); }
+#line 1514 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
 #line 78 "phase2.y" /* yacc.c:1646  */
-    { printf("rel -> rel_exp GREATER_EQUAL_TO rel_exp");}
-#line 1553 "phase2.tab.c" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[-2]) <= (yyvsp[0]); }
+#line 1520 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
 #line 79 "phase2.y" /* yacc.c:1646  */
-    { printf("rel -> rel_exp NOT_EQUAL_TO rel_exp");}
-#line 1559 "phase2.tab.c" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[-2]) >= (yyvsp[0]); }
+#line 1526 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
 #line 80 "phase2.y" /* yacc.c:1646  */
-    { printf("rel -> L_PAREN add_exp R_PAREN"); }
-#line 1565 "phase2.tab.c" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[-2]) != (yyvsp[0]); }
+#line 1532 "phase2.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 47:
+#line 81 "phase2.y" /* yacc.c:1646  */
+    { (yyval) = (yyvsp[-1]); }
+#line 1538 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1569 "phase2.tab.c" /* yacc.c:1646  */
+#line 1542 "phase2.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

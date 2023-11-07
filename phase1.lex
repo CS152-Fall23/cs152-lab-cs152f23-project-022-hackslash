@@ -19,9 +19,12 @@ UNDERSCORE [_]
 
 
 %%
-"int/"+" "{ID}|"double/"+" "{ID}|"string/"+" "{ID}|"bool/"+" "    {return VAR;}
-
-
+"int/" 				{return INT;}
+"double/"			{return DOUBLE;}
+"string/"			{return STRING;}
+"bool/"				{return BOOL;}
+"char/"				{return CHAR;}
+"void/"				{return VOID;}
 
 
 "["                 {return L_SQUARE;}

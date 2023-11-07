@@ -9,13 +9,19 @@
 
 /* %define parse.error  */
 
-%token VAR FUNCTION NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO LH_ID
+%token VAR FUNCTION NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO LH_ID INT STRING CHAR DOUBLE BOOL VOID
 %left ADD SUB
 %left MUL DIV
 %left LESS_THAN GREATER_THAN EQUAL_TO LESS_EQUAL_TO GREATER_EQUAL_TO NOT_EQUAL_TO EQL
-
+%left R_SQUARE L_SQUARE
+%union{
+    int num;
+}
 %start program
 
+%union{
+    int num;
+}
 
 %%
 /* grammar */
@@ -23,7 +29,7 @@ program: %empty {printf("program -> epsilon");}
 | program stmt{printf("program -> stmt");}
 
 stmt: stmt stmt {printf("stmt -> stmt stmt\n");}
-| assignment {printf("stmt -> assignment";)}
+| assignment {printf("stmt -> assignment");}
 | function {printf("stmt -> function");}
 | break {printf("stmt -> break");}
 | read_write_stmt {printf("stmt -> read_write_stmt");}
@@ -57,10 +63,13 @@ elseif: ELSE L_CURLY stmt R_CURLY {printf("elseif -> ELSE{stmt}");}
 rel_exp: IDENT {printf("rel_exp -> IDENT");}
 | add_exp {printf("rel_exp -> add_exp"); }
 | rel {printf("rel_exp -> rel"); }
+rel_exp: IDENT { printf("rel_exp -> IDENT"); }
+| add_exp { printf("rel_exp -> add_exp"); }
+| rel { printf("rel_exp -> rel"); }
 
-add_exp: mul_exp { $$ = $1; }
-| add_exp ADD add_exp { $$ = $1 + $3; } 
-| add_exp SUB add_exp { $$ = $1 - $3; }
+add_exp: mul_exp {printf("add_exp -> mul_exp");}
+| add_exp ADD add_exp {printf("add_exp -> add_exp ADD add_exp");} 
+| add_exp SUB add_exp {printf("add_exp -> add_exp SUB add_exp");}
 
 mul_exp: exp { $$ = $1; }
 | mul_exp MUL mul_exp { $$ = $1 * $3; } 
@@ -80,12 +89,12 @@ rel: rel_exp LESS_THAN rel_exp {printf("rel -> rel_exp LESS_THAN rel_exp"); }
 | L_SQUARE add_exp R_SQUARE { printf("rel -> L_PAREN add_exp R_PAREN"); }
 
 
-var: "int/" { printf("INT"); }
-| "string/" { printf("STRING"); }
-| "double/" { printf("DOUBLE"); }
-| "char/" { printf("CHAR"); }
-| "bool/" { printf("BOOL"); }
-| "void/" { printf("VOID"); }
+var: INT { printf("var -> INT"); }
+| STRING { printf("var -> STRING"); }
+| DOUBLE { printf("var -> DOUBLE"); }
+| CHAR { printf("var -> CHAR"); }
+| BOOL { printf("var -> BOOL"); }
+| VOID { printf("var -> VOID"); }
 
 
 
