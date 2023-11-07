@@ -35,7 +35,7 @@ assignment: VAR LH_ID {printf("assignment -> VAR LH_ID");}
 | VAR LH_ID EQL rel_exp {printf("assignment -> VAR LH_ID = rel_exp");}
 | VAR LH_ID EQL IDENT {printf("assignment -> VAR LH_ID = IDENT");}
 
-function: VAR IDENT L_PAREN arg R_PAREN { stmt }
+function: VAR IDENT L_SQUARE arg R_SQUARE { stmt }
 
 arg: VAR IDENT
 | VAR IDENT COMMA arg
@@ -44,16 +44,16 @@ break: BREAK {printf("break/");}
 
 read_write_stmt: IN IDENT {printf("read_write_stmt -> in/ ID");}
 | OUT IDENT {printf("read_write_stmt -> out/ IDENT");}
-| PRINT L_PAREN IDENT R_PAREN {printf("IDENT");}
+| PRINT L_SQUARE IDENT R_SQUARE {printf("IDENT");}
 
-if_stmt: IF L_PAREN rel_exp R_PAREN  stmt  elseif
-| IF L_PAREN rel_exp R_PAREN stmt ELIF ELSE stmt 
+if_stmt: IF L_SQUARE rel_exp R_SQUARE  stmt  elseif
+| IF L_SQUARE rel_exp R_SQUARE stmt ELIF ELSE stmt 
 
-while_stmt: WHILE L_PAREN rel_exp R_PAREN {stmt}
-| DO stmt WHILE L_PAREN exp R_PAREN
+while_stmt: WHILE L_SQUARE rel_exp R_SQUARE {stmt}
+| DO stmt WHILE L_SQUARE exp R_SQUARE
 
 elseif: %empty {printf("elseif -> epsilon");}
-| ELIF L_PAREN rel_exp R_PAREN { stmt } ELIF
+| ELIF L_SQUARE rel_exp R_SQUARE { stmt } ELIF
 
 rel_exp: IDENT { $$ = $1; }
 | add_exp { $$ = $1; }
