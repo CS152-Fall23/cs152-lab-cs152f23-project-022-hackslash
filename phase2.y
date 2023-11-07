@@ -77,7 +77,7 @@ rel: rel_exp LESS_THAN rel_exp { $$ = $1 < $3; }
 | rel_exp LESS_EQUAL_TO rel_exp { $$ = $1 <= $3; } 
 | rel_exp GREATER_EQUAL_TO rel_exp { $$ = $1 >= $3; } 
 | rel_exp NOT_EQUAL_TO rel_exp { $$ = $1 != $3; } 
-| L_PAREN add_exp R_PAREN { $$ = $2; }
+| L_PAREN rel_exp R_PAREN { $$ = $2; }
 
 
 var: "int/" { printf("INT"); }
