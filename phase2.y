@@ -16,6 +16,9 @@
 
 %start program
 
+%union{
+    int num;
+}
 
 %%
 /* grammar */
