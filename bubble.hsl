@@ -1,4 +1,4 @@
-void(f) bubbleSort(int/ arr[], int/ n) {
+void bubbleSort[int/[] arr, int/ n] {
 	*/ dadsf
 	asdfa
 	/*

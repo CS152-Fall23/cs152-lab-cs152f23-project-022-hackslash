@@ -1,0 +1,4 @@
+argument passed
+var -> BOOL
+lh_id -> IDENTassignment -> var LH_ID
+stmt -> assignment

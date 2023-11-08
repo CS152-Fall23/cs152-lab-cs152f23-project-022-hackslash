@@ -2091,13 +2091,13 @@ void yyfree (void * ptr )
 int main(int argc, char** argv){
 	if (argc >= 2) {
         printf("argument passed\n");
-        yyin = fopen(argv[1], "r");
+        if((yyin = fopen(argv[1], "r")) < 0) { printf("hey couldn't open file %s\n", argv[1]); exit(-1); }
 
 	}
 	else {
 		yyin = stdin;
 	}
-	yylex();
+	yyparse();
 	return 0;
 
 }

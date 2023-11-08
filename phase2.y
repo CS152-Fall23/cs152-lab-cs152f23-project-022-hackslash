@@ -2,7 +2,7 @@
     #include <stdio.h>
     
     int yylex(void);
-    void yyerror(char const *err) {fprintf(stderr, " could not open input \n");}
+    void yyerror(char const *err) {fprintf(stderr, " (syntax error of some kind) \n");}
 
 
 %}
@@ -17,12 +17,10 @@
 %union{
     int num;
 }
-%start program
+%start stmt
 
 %%
 /* grammar */
-program: %empty {printf("program -> epsilon\n");}
-| program stmt{printf("program -> stmt\n");}
 
 stmt: stmt stmt {printf("stmt -> stmt stmt\n");}
 | assignment {printf("stmt -> assignment\n");}
@@ -33,9 +31,12 @@ stmt: stmt stmt {printf("stmt -> stmt stmt\n");}
 | while_stmt {printf("stmt -> while_stmt\n");}
 | %empty {printf("stmt -> epsilon\n");}
 
-assignment: var LH_ID {printf("assignment -> var LH_ID\n");}
-| var LH_ID EQL rel_exp {printf("assignment -> var LH_ID = rel_exp\n");}
-| var LH_ID EQL IDENT {printf("assignment -> var LH_ID = IDENT\n");}
+assignment: var lh_id {printf("assignment -> var LH_ID\n");}
+| var lh_id EQL rel_exp {printf("assignment -> var LH_ID = rel_exp\n");}
+| var lh_id EQL IDENT {printf("assignment -> var LH_ID = IDENT\n");}
+
+lh_id: IDENT {printf("lh_id -> IDENT\n");}
+| IDENT COMMA IDENT {printf("lh_id -> IDENT,IDENT\n");}
 
 function: var IDENT L_SQUARE arg R_SQUARE L_CURLY stmt R_CURLY {printf("function -> var IDENT[arg]{stmt}");}
 
