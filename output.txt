@@ -1,4 +1,155 @@
 argument passed
-var -> BOOL
-lh_id -> IDENTassignment -> var LH_ID
+var -> VOID
+var -> INT
+var -> INT
+arg -> var IDENT
+arg -> var []IDENT,arg
+var -> INT
+lh_id -> IDENT
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+assignment -> var LH_ID = rel_exp;
 stmt -> assignment
+var -> INT
+lh_id -> IDENT
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+assignment -> var LH_ID = rel_exp;
+stmt -> assignment
+var -> BOOL
+lh_id -> IDENT
+declaration -> var LH_ID;
+stmt -> declaration
+assignment -> IDENT = IDENT;stmt -> assignment
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+exp -> IDENT[add_exp]mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+add_exp -> add_exp ADD add_exp
+exp -> IDENT[add_exp]mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+rel -> rel_exp GREATER_THAN rel_exp
+rel_exp -> rel
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+exp -> IDENT[add_exp]mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+add_exp -> add_exp ADD add_exp
+exp -> IDENT[add_exp]mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+pass_arg -> rel_exp
+pass_arg -> rel_exp, pass_arg
+function -> IDENT[arg];
+stmt -> function
+assignment -> IDENT = IDENT;stmt -> assignment
+stmt -> stmt stmt
+elseif -> epsilon
+if_stmt -> IF[rel_exp]{stmt}
+stmt -> if_stmt
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+add_exp -> add_exp ADD add_exp
+rel_exp -> add_exp
+assignment -> IDENT = rel_exp;
+stmt -> assignment
+stmt -> stmt stmt
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+add_exp -> add_exp SUB add_exp
+exp -> L_PAREN add_exp R_PAREN
+mul_exp -> exp
+add_exp -> mul_exp
+add_exp -> add_exp SUB add_exp
+rel_exp -> add_exp
+rel -> rel_exp LESS_THAN rel_exp
+rel_exp -> rel
+while_stmt -> DO{stmt}WHILE[rel_exp]
+stmt -> while_stmt
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+add_exp -> add_exp ADD add_exp
+rel_exp -> add_exp
+assignment -> IDENT = rel_exp;
+stmt -> assignment
+stmt -> stmt stmt
+stmt -> stmt stmt
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+add_exp -> add_exp SUB add_exp
+exp -> L_PAREN add_exp R_PAREN
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+rel -> rel_exp LESS_THAN rel_exp
+rel_exp -> rel
+while_stmt -> DO{stmt}WHILE[rel_exp]
+stmt -> while_stmt
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+rel -> rel_exp EQUAL_TO rel_exp
+rel_exp -> rel
+break -> break/
+stmt -> break
+elseif -> epsilon
+if_stmt -> IF[rel_exp]{stmt}
+stmt -> if_stmt
+stmt -> stmt stmt
+stmt -> stmt stmt
+stmt -> stmt stmt
+stmt -> stmt stmt
+function -> var IDENT[arg]{stmt}stmt -> function
