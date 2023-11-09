@@ -13,6 +13,6 @@ Compiler: BS
 | While and Do-While Loops | while/ [cond & cond \| cond] { <br /> code; <br /> } <br /><br /> do { <br /> code; <br /> } while [cond \| cond & cond] |
 | Break Statements | break/; |
 | If-then-Else Statements | if/[cond & cond] { <br /> code; <br /> } elseif/[cond \| cond] { <br /> code; <br /> } <br /> else { <br /> code; <br /> } |
-| Read and Write Statements | in/ var; <br /> out/ "String"; <br /> print/(" "); |
+| Read and Write Statements | in/ var; <br /> out/ "String"; <br /> print/[" "]; |
 | Comments | ** one line <br /> */multiline <br /> extra line <br /> extra line <br /> */ |
 | Functions | int/ funcname (argument1, argument2) { <br /> logic; <br /> } |
