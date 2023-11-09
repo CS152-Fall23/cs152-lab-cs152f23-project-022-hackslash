@@ -413,7 +413,6 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  33
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   246
 #define YYLAST   345
 
 /* YYNTOKENS -- Number of terminals.  */
@@ -478,8 +477,8 @@ static const yytype_uint8 yyrline[] =
       46,    48,    49,    51,    52,    53,    54,    56,    57,    59,
       61,    62,    63,    65,    66,    68,    70,    71,    72,    74,
       75,    77,    78,    79,    81,    82,    83,    85,    86,    87,
-      88,    89,    92,    93,    94,    95,    96,    97,    98,   101,
-     102,   103,   104,   105,   106
+      88,    89,    91,    92,    93,    94,    95,    96,    97,   100,
+     101,   102,   103,   104,   105
 };
 #endif
 
@@ -1683,79 +1682,79 @@ yyreduce:
     break;
 
   case 52:
-#line 92 "phase2.y" /* yacc.c:1646  */
+#line 91 "phase2.y" /* yacc.c:1646  */
     {printf("rel -> rel_exp LESS_THAN rel_exp\n"); }
 #line 1688 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 93 "phase2.y" /* yacc.c:1646  */
+#line 92 "phase2.y" /* yacc.c:1646  */
     {printf("rel -> rel_exp GREATER_THAN rel_exp\n"); }
 #line 1694 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 94 "phase2.y" /* yacc.c:1646  */
+#line 93 "phase2.y" /* yacc.c:1646  */
     { printf("rel -> rel_exp EQUAL_TO rel_exp\n"); }
 #line 1700 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 95 "phase2.y" /* yacc.c:1646  */
+#line 94 "phase2.y" /* yacc.c:1646  */
     { printf("rel -> rel_exp LESS_EQUAL_TO rel_exp\n"); }
 #line 1706 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 96 "phase2.y" /* yacc.c:1646  */
+#line 95 "phase2.y" /* yacc.c:1646  */
     { printf("rel -> rel_exp GREATER_EQUAL_TO rel_exp\n");}
 #line 1712 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 97 "phase2.y" /* yacc.c:1646  */
+#line 96 "phase2.y" /* yacc.c:1646  */
     { printf("rel -> rel_exp NOT_EQUAL_TO rel_exp\n");}
 #line 1718 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 98 "phase2.y" /* yacc.c:1646  */
+#line 97 "phase2.y" /* yacc.c:1646  */
     { printf("rel -> L_PAREN add_exp R_PAREN\n"); }
 #line 1724 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 101 "phase2.y" /* yacc.c:1646  */
+#line 100 "phase2.y" /* yacc.c:1646  */
     { printf("var -> INT\n"); }
 #line 1730 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 102 "phase2.y" /* yacc.c:1646  */
+#line 101 "phase2.y" /* yacc.c:1646  */
     { printf("var -> STRING\n"); }
 #line 1736 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 103 "phase2.y" /* yacc.c:1646  */
+#line 102 "phase2.y" /* yacc.c:1646  */
     { printf("var -> DOUBLE\n"); }
 #line 1742 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 104 "phase2.y" /* yacc.c:1646  */
+#line 103 "phase2.y" /* yacc.c:1646  */
     { printf("var -> CHAR\n"); }
 #line 1748 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 105 "phase2.y" /* yacc.c:1646  */
+#line 104 "phase2.y" /* yacc.c:1646  */
     { printf("var -> BOOL\n"); }
 #line 1754 "phase2.tab.c" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 106 "phase2.y" /* yacc.c:1646  */
+#line 105 "phase2.y" /* yacc.c:1646  */
     { printf("var -> VOID\n"); }
 #line 1760 "phase2.tab.c" /* yacc.c:1646  */
     break;
@@ -1989,7 +1988,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 110 "phase2.y" /* yacc.c:1906  */
+#line 109 "phase2.y" /* yacc.c:1906  */
 
 
 /* static int yyreport_syntax_error(const yypcontext_t *ctx) {

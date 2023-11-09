@@ -4,7 +4,7 @@ int/ term ;
 int/ i = 0;
 
 while/ [i neq/ 10] {
-     elseif/ [i eqt/ s1] {
+     if/ [i eqt/ s1] {
           term = two;
      }
 
