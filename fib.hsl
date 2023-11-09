@@ -3,12 +3,12 @@ int/ two = 1;
 int/ term ;
 int/ i = 0;
 
-while/ (i neq/ 10) {
-     elseif/ (i eqt/ s1) {
+while/ [i neq/ 10] {
+     elseif/ [i eqt/ s1] {
           term = two;
      }
 
-     @term = one add/ two;
+     term = one add/ two;
      one = two;
      two = term;
      i = i add/ 1;

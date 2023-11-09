@@ -7,7 +7,7 @@
     int currLine = 1;
     int currCol = 0;
 
-	#include "y.tab.c"
+	#include "phase2.tab.c"
 %}
 
 DIGIT[0-9]
@@ -53,7 +53,6 @@ UNDERSCORE [_]
 " "					currCol++;
 (\*\/)(.|\n)*(\/\*)
 "*".*
-"\n"                {printf("NEWLINE\n"); currLine += yyleng; currCol = 0;}
 
 {DIGIT}+            {return NUM;}
 {IDENTIFIER}	    {currCol += yyleng; return IDENT;}
@@ -62,7 +61,7 @@ UNDERSCORE [_]
 "mul/"              {currCol += yyleng; return MUL;}
 "div/"              {currCol += yyleng; return DIV;}
 "lth/"              {currCol += yyleng; return LESS_THAN;}
-"gth/"              {currCol += yyleng; return GREATER_THEN;}
+"gth/"              {currCol += yyleng; return GREATER_THAN;}
 "eqt/"              {currCol += yyleng; return EQUAL_TO;}
 "lte/"              {currCol += yyleng; return LESS_EQUAL_TO;}
 "gte/"              {currCol += yyleng; return GREATER_EQUAL_TO;}
@@ -79,13 +78,13 @@ UNDERSCORE [_]
 int main(int argc, char** argv){
 	if (argc >= 2) {
         printf("argument passed\n");
-        yyin = fopen(argv[1], "r");
+        if((yyin = fopen(argv[1], "r")) < 0) { printf("hey couldn't open file %s\n", argv[1]); exit(-1); }
 
 	}
 	else {
 		yyin = stdin;
 	}
-	yylex();
+	yyparse();
 	return 0;
 
 }
