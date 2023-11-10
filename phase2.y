@@ -19,38 +19,34 @@
 %union{
     int num;
 }
-%start stmt
+%start stmts
 
 %%
 /* grammar */
 
-/* stmts: stmts stmt 
-| %empty */
+stmts: stmt stmts {printf("stmts -> stmt stmts\n");}
+| stmt {printf("stmts -> stmt\n");}
 
-stmt: stmt stmt {printf("stmt -> stmt stmt\n");}
-| declaration {printf("stmt -> declaration\n");}
+stmt: declaration {printf("stmt -> declaration\n");}
 | assignment {printf("stmt -> assignment\n");}
 | function {printf("stmt -> function\n");}
 | break {printf("stmt -> break\n");}
 | read_write_stmt {printf("stmt -> read_write_stmt\n");}
 | if_stmt {printf("stmt -> if_stmt\n");}
 | while_stmt {printf("stmt -> while_stmt\n");}
-| %empty {printf("stmt -> epsilon\n");}
 
-assignment: var lh_id EQL rel_exp SEMI {printf("assignment -> var LH_ID = rel_exp;\n");}
-| var lh_id EQL IDENT SEMI {printf("assignment -> var LH_ID = IDENT;\n");}
-| var L_SQUARE R_SQUARE lh_id EQL rel_exp SEMI {printf("assignment -> var[] LH_ID = rel_exp;\n");}
-| var L_SQUARE R_SQUARE lh_id EQL IDENT SEMI {printf("assignment -> var[] LH_ID = IDENT;\n");}
-| IDENT EQL rel_exp SEMI {printf("assignment -> IDENT = rel_exp;\n");}
-| IDENT EQL IDENT SEMI {printf("assignment -> IDENT = IDENT;");}
+assignment: lh_assign EQL rel_exp SEMI {printf("assignment -> lh_assign = rel_exp;\n");}
 
-declaration: var lh_id SEMI {printf("declaration -> var LH_ID;\n");}
-| var L_SQUARE R_SQUARE lh_id SEMI {printf("declaration -> var[] LH_ID;\n");}
+lh_assign: var lh_id {printf("lh_assign -> var lh_id\n");}
+| var L_SQUARE R_SQUARE lh_id {printf("lh_assign -> var[]");}
+| IDENT {printf("lh_assign -> IDENT");}
+
+declaration: lh_assign SEMI {printf("declaration -> lh_assign;\n");}
 
 lh_id: IDENT {printf("lh_id -> IDENT\n");}
 | IDENT COMMA IDENT {printf("lh_id -> IDENT,IDENT\n");}
 
-function: var IDENT L_SQUARE arg R_SQUARE L_CURLY stmt R_CURLY {printf("function -> var IDENT[arg]{stmt}");}
+function: var IDENT L_SQUARE arg R_SQUARE L_CURLY stmts R_CURLY {printf("function -> var IDENT[arg]{stmts}");}
 | IDENT L_SQUARE pass_arg R_SQUARE SEMI {printf("function -> IDENT[arg];\n");}
 
 arg: var IDENT {printf("arg -> var IDENT\n");}
@@ -67,14 +63,14 @@ read_write_stmt: IN IDENT SEMI{printf("read_write_stmt -> in/ ID\n");}
 | OUT IDENT SEMI{printf("read_write_stmt -> out/ IDENT\n");}
 | PRINT L_SQUARE IDENT R_SQUARE SEMI{printf("read_write -> print/(IDENT)\n");}
 
-while_stmt: WHILE L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY {printf("while_stmt -> WHILE[rel_exp]{stmt}\n");}
-| DO L_CURLY stmt R_CURLY WHILE L_SQUARE rel_exp R_SQUARE {printf("while_stmt -> DO{stmt}WHILE[rel_exp]\n");}
+while_stmt: WHILE L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY {printf("while_stmt -> WHILE[rel_exp]{stmts}\n");}
+| DO L_CURLY stmts R_CURLY WHILE L_SQUARE rel_exp R_SQUARE {printf("while_stmt -> DO{stmts}WHILE[rel_exp]\n");}
 
-if_stmt: IF L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY elseif {printf("if_stmt -> IF[rel_exp]{stmt}\n");}
-| IF IF L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY elseif {printf("ERROR - Two if statement declarations at line %d, column %d.", currLine, currCol); exit(1);}
+if_stmt: IF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY elseif {printf("if_stmt -> IF[rel_exp]{stmts}\n");}
+| IF IF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY elseif {printf("ERROR - Two if statement declarations at line %d, column %d.", currLine, currCol); exit(1);}
 
-elseif: ELSE L_CURLY stmt R_CURLY {printf("elseif -> ELSE{stmt}\n");}
-| ELIF L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY elseif {printf("elseif -> ELSEIF[rel_exp]{stmt}elseif\n");}
+elseif: ELSE L_CURLY stmts R_CURLY {printf("elseif -> ELSE{stmts}\n");}
+| ELIF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY elseif {printf("elseif -> ELSEIF[rel_exp]{stmts}elseif\n");}
 | %empty {printf("elseif -> epsilon\n");}
 
 rel_exp: add_exp {printf("rel_exp -> add_exp\n"); }
