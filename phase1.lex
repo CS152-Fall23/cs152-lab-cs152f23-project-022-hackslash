@@ -19,23 +19,23 @@ UNDERSCORE [_]
 
 
 %%
-"int/" 				{return INT;}
-"double/"			{return DOUBLE;}
-"string/"			{return STRING;}
-"bool/"				{return BOOL;}
-"char/"				{return CHAR;}
-"void/"				{return VOID;}
+"int/" 				{currCol += yyleng; return INT;}
+"double/"			{currCol += yyleng; return DOUBLE;}
+"string/"			{currCol += yyleng; return STRING;}
+"bool/"				{currCol += yyleng; return BOOL;}
+"char/"				{currCol += yyleng; return CHAR;}
+"void/"				{currCol += yyleng; return VOID;}
 
 
-"["                 {return L_SQUARE;}
-"]"                 {return R_SQUARE;}
-"{"                 {return L_CURLY;}
-"}"                 {return R_CURLY;}
-","                 {return COMMA;}
-"("                 {return L_PAREN;}
-")"                 {return R_PAREN;}
+"["                 {currCol += yyleng; return L_SQUARE;}
+"]"                 {currCol += yyleng; return R_SQUARE;}
+"{"                 {currCol += yyleng; return L_CURLY;}
+"}"                 {currCol += yyleng; return R_CURLY;}
+","                 {currCol += yyleng; return COMMA;}
+"("                 {currCol += yyleng; return L_PAREN;}
+")"                 {currCol += yyleng; return R_PAREN;}
 
-"="                 {return EQL;}
+"="                 {currCol += yyleng; return EQL;}
 ";" 				{currCol += yyleng; return SEMI;}
 
 
