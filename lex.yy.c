@@ -587,7 +587,7 @@ char *yytext;
     #include <math.h>
     #include <stdio.h>
 	
-    int currLine = 1;
+    int currLine = 0;
     int currCol = 0;
 
 	#include "phase2.tab.c"
@@ -1063,17 +1063,17 @@ YY_RULE_SETUP
 case 41:
 YY_RULE_SETUP
 #line 70 "phase1.lex"
-{printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", currLine, currCol, yytext); exit(0);}
+{printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", currLine, currCol, yytext); exit(1);}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
 #line 71 "phase1.lex"
-{printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", currLine, currCol, yytext); exit(0);}
+{printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", currLine, currCol, yytext); exit(1);}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
 #line 72 "phase1.lex"
-{return FUNC; currCol += yyleng;}
+{currCol += yyleng; return FUNC;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP

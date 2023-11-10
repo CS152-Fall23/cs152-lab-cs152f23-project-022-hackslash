@@ -1,10 +1,9 @@
 int/ one = 0;
 int/ two = 1;
-int/ term;
+int/ term ;
 int/ i = 0;
 
-while/ [i neq/ 10] {
-     x
+while/[i neq/ 10] {
      if/ [i eqt/ s1] {
           term = two;
      }
@@ -12,6 +11,6 @@ while/ [i neq/ 10] {
      one = two;
      two = term;
      i = i add/ 1;
-
-     print/ [term];     
+     
+     print/ [term]; 
 }

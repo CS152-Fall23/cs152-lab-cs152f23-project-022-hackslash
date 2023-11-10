@@ -3,7 +3,7 @@
     
     int yylex(void);
     void yyerror(char const *err){
-        printf("**----- Line: %d, Column: %d, Error: %s \n", currLine, currCol, yytext); 
+        printf("Line: %d, Column: %d, Error: %s \n", currLine, currCol, yytext); 
         exit(1);
     }
 
@@ -23,6 +23,9 @@
 
 %%
 /* grammar */
+
+/* stmts: stmts stmt 
+| %empty */
 
 stmt: stmt stmt {printf("stmt -> stmt stmt\n");}
 | declaration {printf("stmt -> declaration\n");}
@@ -68,6 +71,7 @@ while_stmt: WHILE L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY {printf("while_
 | DO L_CURLY stmt R_CURLY WHILE L_SQUARE rel_exp R_SQUARE {printf("while_stmt -> DO{stmt}WHILE[rel_exp]\n");}
 
 if_stmt: IF L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY elseif {printf("if_stmt -> IF[rel_exp]{stmt}\n");}
+| IF IF L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY elseif {printf("ERROR - Two if statement declarations at line %d, column %d.", currLine, currCol); exit(1);}
 
 elseif: ELSE L_CURLY stmt R_CURLY {printf("elseif -> ELSE{stmt}\n");}
 | ELIF L_SQUARE rel_exp R_SQUARE L_CURLY stmt R_CURLY elseif {printf("elseif -> ELSEIF[rel_exp]{stmt}elseif\n");}

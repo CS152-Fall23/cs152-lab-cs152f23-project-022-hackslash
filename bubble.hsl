@@ -16,7 +16,7 @@ void/ bubbleSort[int/[] arr, int/n] {
         i = i add/ 1;
     } while/ [i lth/ (n sub/ 1)]
 
-    if/[swapped eqt/ false]{
+    if/if/[swapped eqt/ false]{
         break/;
     }
 }

@@ -4,7 +4,7 @@
     #include <math.h>
     #include <stdio.h>
 	
-    int currLine = 1;
+    int currLine = 0;
     int currCol = 0;
 
 	#include "phase2.tab.c"
@@ -67,9 +67,9 @@ UNDERSCORE [_]
 "gte/"              {currCol += yyleng; return GREATER_EQUAL_TO;}
 "neq/"              {currCol += yyleng; return NOT_EQUAL_TO;}
 
-({DIGIT}|{UNDERSCORE})+{IDENTIFIER}			{printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", currLine, currCol, yytext); exit(0);}
-{IDENTIFIER}{UNDERSCORE}+                   {printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", currLine, currCol, yytext); exit(0);}
-{FUNCTION}	    {return FUNC; currCol += yyleng;}
+({DIGIT}|{UNDERSCORE})+{IDENTIFIER}			{printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", currLine, currCol, yytext); exit(1);}
+{IDENTIFIER}{UNDERSCORE}+                   {printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", currLine, currCol, yytext); exit(1);}
+{FUNCTION}	    {currCol += yyleng; return FUNC;}
 
 [ \t\r]     /* NOP */
 .                   {printf("Error at line %d. column %d: unrecognized symbol \"%s\"\n", currLine, currCol, yytext);}
