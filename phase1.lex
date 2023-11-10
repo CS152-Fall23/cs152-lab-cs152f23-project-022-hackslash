@@ -4,7 +4,7 @@
     #include <math.h>
     #include <stdio.h>
 	
-    int currLine = 1;
+    int currLine = 0;
     int currCol = 0;
 
 	#include "phase2.tab.c"
@@ -12,7 +12,7 @@
 
 DIGIT[0-9]
 ID[a-z][a-zA-Z0-9]*
-LETTER [a-zA-Z]
+LETTER[a-zA-Z]
 IDENTIFIER  ({LETTER}({LETTER}|{DIGIT}|"_")*({LETTER}|{DIGIT}))|{LETTER}
 FUNCTION  (({LETTER}({LETTER}|{DIGIT}|"_")*({LETTER}|{DIGIT}))|{LETTER})(\(.\))
 UNDERSCORE [_]
@@ -54,7 +54,7 @@ UNDERSCORE [_]
 (\*\/)(.|\n)*(\/\*)
 "*".*
 
-{DIGIT}+            {return NUM;}
+{DIGIT}+            {currCol += yyleng; return NUM;}
 {IDENTIFIER}	    {currCol += yyleng; return IDENT;}
 "add/"              {currCol += yyleng; return ADD;}
 "sub/"              {currCol += yyleng; return SUB;}
@@ -67,9 +67,9 @@ UNDERSCORE [_]
 "gte/"              {currCol += yyleng; return GREATER_EQUAL_TO;}
 "neq/"              {currCol += yyleng; return NOT_EQUAL_TO;}
 
-({DIGIT}|{UNDERSCORE})+{IDENTIFIER}			{printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", currLine, currCol, yytext); exit(0);}
-{IDENTIFIER}{UNDERSCORE}+                   {printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", currLine, currCol, yytext); exit(0);}
-{FUNCTION}	    {return FUNC; currCol += yyleng;}
+({DIGIT}|{UNDERSCORE})+{IDENTIFIER}			{printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", currLine, currCol, yytext); exit(1);}
+{IDENTIFIER}{UNDERSCORE}+                   {printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", currLine, currCol, yytext); exit(1);}
+{FUNCTION}	    {currCol += yyleng; return FUNC;}
 
 [ \t\r]     /* NOP */
 .                   {printf("Error at line %d. column %d: unrecognized symbol \"%s\"\n", currLine, currCol, yytext);}

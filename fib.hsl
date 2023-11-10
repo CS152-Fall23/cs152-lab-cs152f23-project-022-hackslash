@@ -7,11 +7,10 @@ while/ [i neq/ 10] {
      if/ [i eqt/ s1] {
           term = two;
      }
-
      term = one add/ two;
      one = two;
      two = term;
      i = i add/ 1;
      
-     print/ (term) ;
+     print/ [term] ;
 }

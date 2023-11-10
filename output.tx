@@ -1,0 +1,40 @@
+argument passed
+var -> INT
+lh_id -> IDENT
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+assignment -> var LH_ID = rel_exp;
+stmt -> assignment
+var -> INT
+lh_id -> IDENT
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+assignment -> var LH_ID = rel_exp;
+stmt -> assignment
+var -> INT
+lh_id -> IDENT
+declaration -> var LH_ID;
+stmt -> declaration
+var -> INT
+lh_id -> IDENT
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+assignment -> var LH_ID = rel_exp;
+stmt -> assignment
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+rel -> rel_exp NOT_EQUAL_TO rel_exp
+rel_exp -> rel
+Error: on line: 8, column: 8, error: "syntax error" 
