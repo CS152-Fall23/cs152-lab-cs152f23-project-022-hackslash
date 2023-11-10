@@ -4,7 +4,7 @@
     #include <math.h>
     #include <stdio.h>
 	
-    int currLine = 1;
+    int currLine = 0;
     int currCol = 0;
 
 	#include "y.tab.c"

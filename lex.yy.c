@@ -861,72 +861,72 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 22 "phase1.lex"
-{return INT;}
+{currCol += yyleng; return INT;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
 #line 23 "phase1.lex"
-{return DOUBLE;}
+{currCol += yyleng; return DOUBLE;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 24 "phase1.lex"
-{return STRING;}
+{currCol += yyleng; return STRING;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 25 "phase1.lex"
-{return BOOL;}
+{currCol += yyleng; return BOOL;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 26 "phase1.lex"
-{return CHAR;}
+{currCol += yyleng; return CHAR;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 27 "phase1.lex"
-{return VOID;}
+{currCol += yyleng; return VOID;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 30 "phase1.lex"
-{return L_SQUARE;}
+{currCol += yyleng; return L_SQUARE;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 31 "phase1.lex"
-{return R_SQUARE;}
+{currCol += yyleng; return R_SQUARE;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 32 "phase1.lex"
-{return L_CURLY;}
+{currCol += yyleng; return L_CURLY;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 33 "phase1.lex"
-{return R_CURLY;}
+{currCol += yyleng; return R_CURLY;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 34 "phase1.lex"
-{return COMMA;}
+{currCol += yyleng; return COMMA;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 35 "phase1.lex"
-{return L_PAREN;}
+{currCol += yyleng; return L_PAREN;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 36 "phase1.lex"
-{return R_PAREN;}
+{currCol += yyleng; return R_PAREN;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 38 "phase1.lex"
-{return EQL;}
+{currCol += yyleng; return EQL;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
@@ -1003,7 +1003,7 @@ YY_RULE_SETUP
 case 29:
 YY_RULE_SETUP
 #line 57 "phase1.lex"
-{return NUM;}
+{currCol += yyleng; return NUM;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP

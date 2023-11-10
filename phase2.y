@@ -2,8 +2,10 @@
     #include <stdio.h>
     
     int yylex(void);
-    void yyerror(char const *err) {fprintf(stderr, " (syntax error of some kind) \n");}
-
+    void yyerror(char const *err){
+        printf("**----- Line: %d, Column: %d, Error: %s \n", currLine, currCol, yytext); 
+        exit(1);
+    }
 
 %}
 
@@ -107,6 +109,7 @@ var: INT { printf("var -> INT\n"); }
 
 
 %%
+
 
 /* static int yyreport_syntax_error(const yypcontext_t *ctx) {
     yysymbol_kind_t tokenCausingError = yypcontext_token(ctx);

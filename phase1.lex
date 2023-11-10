@@ -12,30 +12,30 @@
 
 DIGIT[0-9]
 ID[a-z][a-zA-Z0-9]*
-LETTER [a-zA-Z]
+LETTER[a-zA-Z]
 IDENTIFIER  ({LETTER}({LETTER}|{DIGIT}|"_")*({LETTER}|{DIGIT}))|{LETTER}
 FUNCTION  (({LETTER}({LETTER}|{DIGIT}|"_")*({LETTER}|{DIGIT}))|{LETTER})(\(.\))
 UNDERSCORE [_]
 
 
 %%
-"int/" 				{return INT;}
-"double/"			{return DOUBLE;}
-"string/"			{return STRING;}
-"bool/"				{return BOOL;}
-"char/"				{return CHAR;}
-"void/"				{return VOID;}
+"int/" 				{currCol += yyleng; return INT;}
+"double/"			{currCol += yyleng; return DOUBLE;}
+"string/"			{currCol += yyleng; return STRING;}
+"bool/"				{currCol += yyleng; return BOOL;}
+"char/"				{currCol += yyleng; return CHAR;}
+"void/"				{currCol += yyleng; return VOID;}
 
 
-"["                 {return L_SQUARE;}
-"]"                 {return R_SQUARE;}
-"{"                 {return L_CURLY;}
-"}"                 {return R_CURLY;}
-","                 {return COMMA;}
-"("                 {return L_PAREN;}
-")"                 {return R_PAREN;}
+"["                 {currCol += yyleng; return L_SQUARE;}
+"]"                 {currCol += yyleng; return R_SQUARE;}
+"{"                 {currCol += yyleng; return L_CURLY;}
+"}"                 {currCol += yyleng; return R_CURLY;}
+","                 {currCol += yyleng; return COMMA;}
+"("                 {currCol += yyleng; return L_PAREN;}
+")"                 {currCol += yyleng; return R_PAREN;}
 
-"="                 {return EQL;}
+"="                 {currCol += yyleng; return EQL;}
 ";" 				{currCol += yyleng; return SEMI;}
 
 
@@ -54,7 +54,7 @@ UNDERSCORE [_]
 (\*\/)(.|\n)*(\/\*)
 "*".*
 
-{DIGIT}+            {return NUM;}
+{DIGIT}+            {currCol += yyleng; return NUM;}
 {IDENTIFIER}	    {currCol += yyleng; return IDENT;}
 "add/"              {currCol += yyleng; return ADD;}
 "sub/"              {currCol += yyleng; return SUB;}
