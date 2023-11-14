@@ -19,7 +19,8 @@ assignment -> lh_assign = rel_exp;
 stmt -> assignment
 var -> INT
 lh_id -> IDENT
-declaration -> var LH_ID;
+lh_assign -> var lh_id
+declaration -> lh_assign;
 stmt -> declaration
 var -> INT
 lh_id -> IDENT
