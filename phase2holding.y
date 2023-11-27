@@ -42,29 +42,101 @@ program: { printf("func main\n"); } stmts { printf("endfunc\n"); } { printf("Nor
  
 stmts: stmt stmts {printf("Normal statement proc!\n");}
 | stmt {printf("Normal statement proc!\n");}
-| %empty {} 
 
-stmt: add_exp EQL SEMI {} 
-| add_exp {} 
+stmt: declaration {}
+| assignment {}
+| function {}
+| break {}
+| read_write_stmt {}
+| if_stmt {}
+| while_stmt {}
+
+assignment: lh_assign EQL rel_exp SEMI {}
+
+declaration: lh_assign SEMI {}
+
+lh_assign: var lh_id {}
+| var L_SQUARE R_SQUARE lh_id {}
+| IDENT {}
+
+lh_id: IDENT {}
+| IDENT COMMA IDENT {}
+
+function: var IDENT L_SQUARE arg R_SQUARE L_CURLY stmts R_CURLY {}
+| IDENT L_SQUARE pass_arg R_SQUARE SEMI {}
+
+arg: var IDENT {}
+| var IDENT COMMA arg {}
+| var L_SQUARE R_SQUARE IDENT {}
+| var L_SQUARE R_SQUARE IDENT COMMA arg {}
+
+pass_arg: rel_exp {}
+| rel_exp COMMA pass_arg {}
+
+break: BREAK SEMI{}
+
+read_write_stmt: IN IDENT SEMI{}
+| OUT IDENT SEMI{}
+| PRINT L_SQUARE IDENT R_SQUARE SEMI{}
+
+while_stmt: WHILE L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY {}
+| DO L_CURLY stmts R_CURLY WHILE L_SQUARE rel_exp R_SQUARE {}
+
+if_stmt: IF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY elseif {}
+| IF IF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY elseif {}
+
+elseif: ELSE L_CURLY stmts R_CURLY {}
+| ELIF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY elseif {}
+| %empty {}
+
+rel_exp: add_exp {}
+| rel {}
 
 add_exp: mul_exp { $$ = $1; }
-| add_exp ADD add_exp {} 
-| add_exp SUB add_exp {} 
+| add_exp ADD add_exp {
+    char *name = genTempName(); 
+
+    printf(". %s\n", name); 
+    printf("+ %s, %s, %s\n", name, $1.name, $3.name); 
+
+    $$.name = name; 
+} 
+| add_exp SUB add_exp {}
 
 mul_exp: exp { $$ = $1; }
-| mul_exp MUL mul_exp {}
+| mul_exp MUL mul_exp {} 
 | mul_exp DIV mul_exp {} 
 
-exp: NUM {
+exp: NUM { 
     char *name = genTempName(); 
     
     printf(". %s\n", name); 
     printf("= %s, %s\n", name, $1); 
 
     $$.name = name;
-}
-| SUB exp {} 
+    } 
+| IDENT {}
+| IDENT L_SQUARE add_exp R_SQUARE {}
+| SUB exp {}
 | L_PAREN add_exp R_PAREN {}
+
+rel: rel_exp LESS_THAN rel_exp {} 
+| rel_exp GREATER_THAN rel_exp {} 
+| rel_exp EQUAL_TO rel_exp {}  
+| rel_exp LESS_EQUAL_TO rel_exp { } 
+| rel_exp GREATER_EQUAL_TO rel_exp { } 
+| rel_exp NOT_EQUAL_TO rel_exp { } 
+| L_SQUARE add_exp R_SQUARE { }
+
+
+var: INT {  }
+| STRING {  }
+| DOUBLE {  }
+| CHAR {  }
+| BOOL {  }
+| VOID { }
+
+
 
 %%
 

@@ -1,2 +1,6 @@
 func main
-Line: 0, Column: 4, Error: int/ 
+. temp0
+= temp0, (null)
+Normal statement proc!
+endfunc
+Normal program proc!
