@@ -1,6 +1,11 @@
 func main
 . temp0
 = temp0, (null)
+. temp1
+= temp1, (null)
+. temp2
++ temp2, temp0, temp1
+.> temp2
 Normal statement proc!
 endfunc
 Normal program proc!

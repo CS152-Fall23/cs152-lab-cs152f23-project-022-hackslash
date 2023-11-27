@@ -101,11 +101,32 @@ add_exp: mul_exp { $$ = $1; }
 
     $$.name = name; 
 } 
-| add_exp SUB add_exp {}
+| add_exp SUB add_exp {
+    char *name = genTempName(); 
+
+    printf(". %s\n", name); 
+    printf("+ %s, %s, %s\n", name, $1.name, $3.name); 
+
+    $$.name = name; 
+}
 
 mul_exp: exp { $$ = $1; }
-| mul_exp MUL mul_exp {} 
-| mul_exp DIV mul_exp {} 
+| mul_exp MUL mul_exp {
+    char *name = genTempName(); 
+
+    printf(". %s\n", name); 
+    printf("+ %s, %s, %s\n", name, $1.name, $3.name); 
+
+    $$.name = name; 
+} 
+| mul_exp DIV mul_exp {
+    char *name = genTempName(); 
+
+    printf(". %s\n", name); 
+    printf("+ %s, %s, %s\n", name, $1.name, $3.name); 
+
+    $$.name = name; 
+} 
 
 exp: NUM { 
     char *name = genTempName(); 

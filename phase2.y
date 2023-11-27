@@ -44,16 +44,46 @@ stmts: stmt stmts {printf("Normal statement proc!\n");}
 | stmt {printf("Normal statement proc!\n");}
 | %empty {} 
 
-stmt: add_exp EQL SEMI {} 
+stmt: add_exp EQL {
+    printf(".> %s\n", $1.name); 
+} 
 | add_exp {} 
 
 add_exp: mul_exp { $$ = $1; }
-| add_exp ADD add_exp {} 
-| add_exp SUB add_exp {} 
+| add_exp ADD add_exp {
+    char *name = genTempName(); 
+
+    printf(". %s\n", name); 
+    printf("+ %s, %s, %s\n", name, $1.name, $3.name); 
+
+    $$.name = name; 
+} 
+| add_exp SUB add_exp {
+    char *name = genTempName(); 
+
+    printf(". %s\n", name); 
+    printf("+ %s, %s, %s\n", name, $1.name, $3.name); 
+
+    $$.name = name; 
+} 
 
 mul_exp: exp { $$ = $1; }
-| mul_exp MUL mul_exp {}
-| mul_exp DIV mul_exp {} 
+| mul_exp MUL mul_exp {
+    char *name = genTempName(); 
+
+    printf(". %s\n", name); 
+    printf("+ %s, %s, %s\n", name, $1.name, $3.name); 
+
+    $$.name = name; 
+}
+| mul_exp DIV mul_exp {
+    char *name = genTempName(); 
+
+    printf(". %s\n", name); 
+    printf("+ %s, %s, %s\n", name, $1.name, $3.name); 
+
+    $$.name = name; 
+} 
 
 exp: NUM {
     char *name = genTempName(); 
