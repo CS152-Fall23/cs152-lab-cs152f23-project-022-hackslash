@@ -28,11 +28,11 @@
 %type<num> NUM
 %type<var> add_exp mul_exp exp
 
-%start stmts
+%start program
 
 %%
 /* grammar */
-
+program: {printf("func main\n");} stmts {printf("endfunc\n");}
 stmts: stmt stmts {printf("stmts -> stmt stmts\n");}
 | stmt {printf("stmts -> stmt\n");}
 
