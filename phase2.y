@@ -6,7 +6,12 @@
         printf("Line: %d, Column: %d, Error: %s \n", currLine, currCol, yytext); 
         exit(1);
     }
-
+    static char* genTempName() {
+        static unsigned long long counter;
+        static char buff[4096]; sprintf(buff, "temp%llu", counter++);
+        return strdup(buff);
+    }
+    typedef struct { char *name; char *value; } VarData;
 %}
 
 /* %define parse.error  */
@@ -17,8 +22,12 @@
 %left LESS_THAN GREATER_THAN EQUAL_TO LESS_EQUAL_TO GREATER_EQUAL_TO NOT_EQUAL_TO EQL
 %left R_SQUARE L_SQUARE
 %union{
-    int num;
+    char* num;
+    VarData var;
 }
+%type<num> NUM
+%type<var> add_exp mul_exp exp
+
 %start stmts
 
 %%
@@ -76,15 +85,32 @@ elseif: ELSE L_CURLY stmts R_CURLY {printf("elseif -> ELSE{stmts}\n");}
 rel_exp: add_exp {printf("rel_exp -> add_exp\n"); }
 | rel {printf("rel_exp -> rel\n"); }
 
-add_exp: mul_exp {printf("add_exp -> mul_exp\n");}
-| add_exp ADD add_exp {printf("add_exp -> add_exp ADD add_exp\n");} 
+add_exp: mul_exp {
+    $$ = $1;  
+    printf("add_exp -> mul_exp\n");}
+| add_exp ADD add_exp {
+    char *name = genTempName();
+    printf(". %s\n", name);
+    printf("+ %s, %s, %s\n", name, $1.name, $3.name);
+
+    $$.name=name;
+    printf("add_exp -> add_exp ADD add_exp\n");} 
+    
 | add_exp SUB add_exp {printf("add_exp -> add_exp SUB add_exp\n");}
 
 mul_exp: exp {printf("mul_exp -> exp\n");}
 | mul_exp MUL mul_exp {printf("mul_exp -> mul_exp MUL mul_exp\n");} 
 | mul_exp DIV mul_exp {printf("mul_exp -> mul_exp DIV mul_exp\n");} 
 
-exp: NUM {printf("exp -> NUM\n");} 
+exp: NUM {
+    char *name = genTempName();
+
+    printf(". %s\n", name);
+    printf("= %s, %s\n", name, $1);
+
+    $$.name = name;
+    printf("exp -> NUM\n");
+} 
 | IDENT {printf("exp -> IDENT\n");}
 | IDENT L_SQUARE add_exp R_SQUARE {printf("exp -> IDENT[add_exp]");}
 | SUB exp {printf("exp -> SUB exp\n");}

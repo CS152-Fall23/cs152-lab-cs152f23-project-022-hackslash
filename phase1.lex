@@ -54,7 +54,7 @@ UNDERSCORE [_]
 (\*\/)(.|\n)*(\/\*)
 "*".*
 
-{DIGIT}+            {currCol += yyleng; return NUM;}
+{DIGIT}+            {currCol += yyleng; yylval.num=strdup(yytext); return NUM;}
 {IDENTIFIER}	    {currCol += yyleng; return IDENT;}
 "add/"              {currCol += yyleng; return ADD;}
 "sub/"              {currCol += yyleng; return SUB;}
