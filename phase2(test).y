@@ -25,9 +25,9 @@
     char* num;
     VarData var;
 }
+%type<num> NUM
+%type<var> add_exp mul_exp exp
 
-%type<num> NUM rel_exp
-%type<var> add_exp mul_exp exp rel
 %start stmts
 
 %%
@@ -115,50 +115,19 @@ exp: NUM {
 | SUB exp {printf("exp -> SUB exp\n");}
 | L_PAREN add_exp R_PAREN {printf("exp -> L_PAREN add_exp R_PAREN\n");}
 
-//rel expressions
 rel: rel_exp LESS_THAN rel_exp {     
     char *name = genTempName();
     printf(". %s\n", name);
-    printf("lth/ %s, %s, %s\n", name, $1, $3);
+    printf("+ %s, %s, %s\n", name, $1.name, $3.name);
 
     $$.name=name; 
 } 
-| rel_exp GREATER_THAN rel_exp { 
-    char *name = genTempName();
-    printf(". %s\n", name);
-    printf("gth/ %s, %s, %s\n", name, $1, $3);
-
-    $$.name=name; 
- } 
-| rel_exp EQUAL_TO rel_exp { 
-    char *name = genTempName();
-    printf(". %s\n", name);
-    printf("eqt/ %s, %s, %s\n", name, $1, $3);
-
-    $$.name=name; 
-} 
-| rel_exp LESS_EQUAL_TO rel_exp { 
-    char *name = genTempName();
-    printf(". %s\n", name);
-    printf("lte/ %s, %s, %s\n", name, $1, $3);
-
-    $$.name=name; 
- } 
-| rel_exp GREATER_EQUAL_TO rel_exp { 
-    char *name = genTempName();
-    printf(". %s\n", name);
-    printf("gte/ %s, %s, %s\n", name, $1, $3);
-
-    $$.name=name; 
-} 
-| rel_exp NOT_EQUAL_TO rel_exp { 
-    char *name = genTempName();
-    printf(". %s\n", name);
-    printf("neq/ %s, %s, %s\n", name, $1, $3);
-
-    $$.name=name; 
-} 
-| L_SQUARE add_exp R_SQUARE { }
+| rel_exp GREATER_THAN rel_exp {printf("rel -> rel_exp GREATER_THAN rel_exp\n"); } 
+| rel_exp EQUAL_TO rel_exp { printf("rel -> rel_exp EQUAL_TO rel_exp\n"); } 
+| rel_exp LESS_EQUAL_TO rel_exp { printf("rel -> rel_exp LESS_EQUAL_TO rel_exp\n"); } 
+| rel_exp GREATER_EQUAL_TO rel_exp { printf("rel -> rel_exp GREATER_EQUAL_TO rel_exp\n");} 
+| rel_exp NOT_EQUAL_TO rel_exp { printf("rel -> rel_exp NOT_EQUAL_TO rel_exp\n");} 
+| L_SQUARE add_exp R_SQUARE { printf("rel -> L_PAREN add_exp R_PAREN\n"); }
 
 
 var: INT { printf("var -> INT\n"); }

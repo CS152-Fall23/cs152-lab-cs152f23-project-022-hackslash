@@ -1,11 +1,16 @@
-func main
 . temp0
-= temp0, (null)
+= temp0, 1
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
 . temp1
-= temp1, (null)
+= temp1, 2
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
 . temp2
-+ temp2, temp0, temp1
-.> temp2
-Normal statement proc!
-endfunc
-Normal program proc!
+gth/ temp2, temp0, temp1
+rel_exp -> rel
+Line: 0, Column: 14, Error:  
