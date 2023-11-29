@@ -1,17 +1,32 @@
 %{
     #include <stdio.h>
+    #include <string.h> 
     
     int yylex(void);
     void yyerror(char const *err){
         printf("Line: %d, Column: %d, Error: %s \n", currLine, currCol, yytext); 
-        exit(1);
+        //exit(1);
     }
+
     static char* genTempName() {
         static unsigned long long counter;
         static char buff[4096]; sprintf(buff, "temp%llu", counter++);
         return strdup(buff);
     }
+
     typedef struct { char *name; char *value; } VarData;
+
+    static char* genLabelName(int offset) {
+        static unsigned long long counter; 
+        static char buff[4096]; 
+
+        switch(offset) {
+            case 0: { sprintf(buff, "label%llu", counter++); } break; 
+            default: { sprintf(buff, "label%llu", counter + offset); } break; 
+        }
+
+        return strdup(buff); 
+    }
 %}
 
 /* %define parse.error  */
@@ -23,71 +38,117 @@
 %left R_SQUARE L_SQUARE
 %union{
     char* num;
+    char* label; 
     VarData var;
 }
 
-%type<num> NUM rel_exp
-%type<var> add_exp mul_exp exp rel
+%type<num> NUM rel_exp if_stmt IDENT
+%type<var> add_exp mul_exp exp rel read_write_stmt lh_assign
 %start stmts
 
 %%
 /* grammar */
 
-stmts: stmt stmts {printf("stmts -> stmt stmts\n");}
-| stmt {printf("stmts -> stmt\n");}
+stmts: stmt stmts {printf("Normal statement proc!\n");}
+| stmt {printf("Normal statement proc!\n");}
 
-stmt: declaration {printf("stmt -> declaration\n");}
-| assignment {printf("stmt -> assignment\n");}
-| function {printf("stmt -> function\n");}
-| break {printf("stmt -> break\n");}
-| read_write_stmt {printf("stmt -> read_write_stmt\n");}
-| if_stmt {printf("stmt -> if_stmt\n");}
-| while_stmt {printf("stmt -> while_stmt\n");}
 
-assignment: lh_assign EQL rel_exp SEMI {printf("assignment -> lh_assign = rel_exp;\n");}
+///////////////////////////////////////////// STATEMENTS ///////////////////////////////////////////////////
+stmt: declaration {}
+| assignment {}
+| function {}
+| break {}
+| read_write_stmt {}
+| if_stmt {}
+| while_stmt {}
 
-lh_assign: var lh_id {printf("lh_assign -> var lh_id\n");}
-| var L_SQUARE R_SQUARE lh_id {printf("lh_assign -> var[]");}
-| IDENT {printf("lh_assign -> IDENT");}
 
-declaration: lh_assign SEMI {printf("declaration -> lh_assign;\n");}
 
-lh_id: IDENT {printf("lh_id -> IDENT\n");}
-| IDENT COMMA IDENT {printf("lh_id -> IDENT,IDENT\n");}
+///////////////////////////////////////////// ASSIGNMENT ///////////////////////////////////////////////////
+assignment: lh_assign EQL rel_exp SEMI {}
 
-function: var IDENT L_SQUARE arg R_SQUARE L_CURLY stmts R_CURLY {printf("function -> var IDENT[arg]{stmts}");}
-| IDENT L_SQUARE pass_arg R_SQUARE SEMI {printf("function -> IDENT[arg];\n");}
 
-arg: var IDENT {printf("arg -> var IDENT\n");}
-| var IDENT COMMA arg {printf("arg -> var IDENT,arg\n");}
-| var L_SQUARE R_SQUARE IDENT {printf("arg -> var []IDENT\n");}
-| var L_SQUARE R_SQUARE IDENT COMMA arg {printf("arg -> var []IDENT,arg\n");}
 
-pass_arg: rel_exp {printf("pass_arg -> rel_exp\n");}
-| rel_exp COMMA pass_arg {printf("pass_arg -> rel_exp, pass_arg\n");}
+///////////////////////////////////////////// DECLARATION ///////////////////////////////////////////////////
+declaration: lh_assign SEMI {}
 
-break: BREAK SEMI{printf("break -> break/\n");}
 
-read_write_stmt: IN IDENT SEMI{printf("read_write_stmt -> in/ ID\n");}
-| OUT IDENT SEMI{printf("read_write_stmt -> out/ IDENT\n");}
-| PRINT L_SQUARE IDENT R_SQUARE SEMI{printf("read_write -> print/(IDENT)\n");}
+///////////////////////////////////////////// LEFT HAND ASSIGN ///////////////////////////////////////////////////
+lh_assign: var lh_id {}
+| var L_SQUARE NUM R_SQUARE lh_id {
+    char *name = genTempName();
+    printf(".[]< %s, %s\n", name, $3);
 
-while_stmt: WHILE L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY {printf("while_stmt -> WHILE[rel_exp]{stmts}\n");}
-| DO L_CURLY stmts R_CURLY WHILE L_SQUARE rel_exp R_SQUARE {printf("while_stmt -> DO{stmts}WHILE[rel_exp]\n");}
+    $$.name=name;
+}
+| IDENT {}
 
-if_stmt: IF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY elseif {printf("if_stmt -> IF[rel_exp]{stmts}\n");}
-| IF IF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY elseif {printf("ERROR - Two if statement declarations at line %d, column %d.", currLine, currCol); exit(1);}
 
-elseif: ELSE L_CURLY stmts R_CURLY {printf("elseif -> ELSE{stmts}\n");}
-| ELIF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY elseif {printf("elseif -> ELSEIF[rel_exp]{stmts}elseif\n");}
-| %empty {printf("elseif -> epsilon\n");}
+///////////////////////////////////////////// LEFT HAND ID ///////////////////////////////////////////////////
+lh_id: IDENT {}
+| IDENT COMMA IDENT {}
 
-rel_exp: add_exp {printf("rel_exp -> add_exp\n"); }
-| rel {printf("rel_exp -> rel\n"); }
 
+///////////////////////////////////////////// FUNCTIONS ///////////////////////////////////////////////////
+function: var IDENT L_SQUARE arg R_SQUARE L_CURLY stmts R_CURLY {}
+| IDENT L_SQUARE pass_arg R_SQUARE SEMI {}
+
+
+///////////////////////////////////////////// ARGUMENT ///////////////////////////////////////////////////
+arg: var IDENT {}
+| var IDENT COMMA arg {}
+| var L_SQUARE R_SQUARE IDENT {}
+| var L_SQUARE R_SQUARE IDENT COMMA arg {}
+
+
+///////////////////////////////////////////// ADD/SUB EXPRESSIONS ///////////////////////////////////////////////////
+pass_arg: rel_exp {}
+| rel_exp COMMA pass_arg {}
+
+
+
+///////////////////////////////////////////// BREAK ///////////////////////////////////////////////////
+break: BREAK SEMI{}
+
+
+///////////////////////////////////////////// READ/WRITE STATEMENTS ///////////////////////////////////////////////////
+read_write_stmt: IN IDENT SEMI {
+    printf(".< %s\n", $2);
+}
+| OUT IDENT SEMI {
+    printf(".> %s\n", $2);
+}
+| PRINT L_SQUARE IDENT R_SQUARE SEMI{}
+
+
+///////////////////////////////////////////// WHILE STATEMENTS ///////////////////////////////////////////////////
+while_stmt: WHILE L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY {}
+| DO L_CURLY stmts R_CURLY WHILE L_SQUARE rel_exp R_SQUARE {}
+
+
+
+///////////////////////////////////////////// IF STATEMENTS ///////////////////////////////////////////////////
+if_stmt: IF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY { } 
+| IF IF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY elseif {}
+
+
+
+///////////////////////////////////////////// ELSEIF STATEMENTS ///////////////////////////////////////////////////
+elseif: ELSE L_CURLY stmts R_CURLY {}
+| ELIF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY elseif {}
+| %empty {}
+
+
+
+/////////////////////////////////////////////  EXPRESSIONS ///////////////////////////////////////////////////
+rel_exp: add_exp{ }
+| rel { }
+
+
+///////////////////////////////////////////// ADD/SUB EXPRESSIONS ///////////////////////////////////////////////////
 add_exp: mul_exp {
     $$ = $1;  
-    printf("add_exp -> mul_exp\n");}
+}
 | add_exp ADD add_exp {
     char *name = genTempName();
     printf(". %s\n", name);
@@ -95,12 +156,34 @@ add_exp: mul_exp {
 
     $$.name=name;
     } 
-| add_exp SUB add_exp {printf("add_exp -> add_exp SUB add_exp\n");}
+| add_exp SUB add_exp {
+    char *name = genTempName();
+    printf(". %s\n", name);
+    printf("- %s, %s, %s\n", name, $1.name, $3.name);
 
-mul_exp: exp {printf("mul_exp -> exp\n");}
-| mul_exp MUL mul_exp {printf("mul_exp -> mul_exp MUL mul_exp\n");} 
-| mul_exp DIV mul_exp {printf("mul_exp -> mul_exp DIV mul_exp\n");} 
+    $$.name=name;
+}
 
+
+///////////////////////////////////////////// MUL/DIV EXPRESSIONS ///////////////////////////////////////////////////
+mul_exp: exp {}
+| mul_exp MUL mul_exp {
+    char *name = genTempName();
+    printf(". %s\n", name);
+    printf("* %s, %s, %s\n", name, $1.name, $3.name);
+
+    $$.name=name;
+} 
+| mul_exp DIV mul_exp {
+    char *name = genTempName();
+    printf(". %s\n", name);
+    printf("/ %s, %s, %s\n", name, $1.name, $3.name);
+
+    $$.name=name;
+} 
+
+
+///////////////////////////////////////////// EXPRESSIONS ///////////////////////////////////////////////////
 exp: NUM {
     char *name = genTempName();
 
@@ -108,66 +191,66 @@ exp: NUM {
     printf("= %s, %s\n", name, $1);
 
     $$.name = name;
-    printf("exp -> NUM\n");
 } 
-| IDENT {printf("exp -> IDENT\n");}
-| IDENT L_SQUARE add_exp R_SQUARE {printf("exp -> IDENT[add_exp]");}
-| SUB exp {printf("exp -> SUB exp\n");}
-| L_PAREN add_exp R_PAREN {printf("exp -> L_PAREN add_exp R_PAREN\n");}
+| IDENT { }
+| IDENT L_SQUARE add_exp R_SQUARE { }
+| SUB exp { }
+| L_PAREN add_exp R_PAREN { }
 
-//rel expressions
+
+///////////////////////////////////////////// RELATIONAL EXPRESSIONS ///////////////////////////////////////////////////
 rel: rel_exp LESS_THAN rel_exp {     
     char *name = genTempName();
     printf(". %s\n", name);
-    printf("lth/ %s, %s, %s\n", name, $1, $3);
+    printf("< %s, %s, %s\n", name, $1, $3);
 
     $$.name=name; 
 } 
 | rel_exp GREATER_THAN rel_exp { 
     char *name = genTempName();
     printf(". %s\n", name);
-    printf("gth/ %s, %s, %s\n", name, $1, $3);
+    printf("> %s, %s, %s\n", name, $1, $3);
 
     $$.name=name; 
  } 
 | rel_exp EQUAL_TO rel_exp { 
     char *name = genTempName();
     printf(". %s\n", name);
-    printf("eqt/ %s, %s, %s\n", name, $1, $3);
+    printf("== %s, %s, %s\n", name, $1, $3);
 
     $$.name=name; 
 } 
 | rel_exp LESS_EQUAL_TO rel_exp { 
     char *name = genTempName();
     printf(". %s\n", name);
-    printf("lte/ %s, %s, %s\n", name, $1, $3);
+    printf("<= %s, %s, %s\n", name, $1, $3);
 
     $$.name=name; 
  } 
 | rel_exp GREATER_EQUAL_TO rel_exp { 
     char *name = genTempName();
     printf(". %s\n", name);
-    printf("gte/ %s, %s, %s\n", name, $1, $3);
+    printf(">= %s, %s, %s\n", name, $1, $3);
 
     $$.name=name; 
 } 
 | rel_exp NOT_EQUAL_TO rel_exp { 
     char *name = genTempName();
     printf(". %s\n", name);
-    printf("neq/ %s, %s, %s\n", name, $1, $3);
+    printf("!= %s, %s, %s\n", name, $1, $3);
 
     $$.name=name; 
 } 
 | L_SQUARE add_exp R_SQUARE { }
 
 
-var: INT { printf("var -> INT\n"); }
-| STRING { printf("var -> STRING\n"); }
-| DOUBLE { printf("var -> DOUBLE\n"); }
-| CHAR { printf("var -> CHAR\n"); }
-| BOOL { printf("var -> BOOL\n"); }
-| VOID { printf("var -> VOID\n"); }
-
+///////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////
+var: INT {  }
+| STRING {  }
+| DOUBLE {  }
+| CHAR {  }
+| BOOL {  }
+| VOID { }
 
 
 %%

@@ -1,16 +1,19 @@
 . temp0
-= temp0, 1
-exp -> NUM
-mul_exp -> exp
-add_exp -> mul_exp
-rel_exp -> add_exp
+= temp0, 0
 . temp1
-= temp1, 2
-exp -> NUM
-mul_exp -> exp
-add_exp -> mul_exp
-rel_exp -> add_exp
+= temp1, 1
 . temp2
-gth/ temp2, temp0, temp1
-rel_exp -> rel
-Line: 0, Column: 14, Error:  
+> temp2, x, temp1
+. temp3
+= temp3, 1
+. temp4
++ temp4, x, temp3
+Normal statement proc!
+.[]< temp5, 0
+.< x
+.> y
+Normal statement proc!
+Normal statement proc!
+Normal statement proc!
+Normal statement proc!
+Normal statement proc!

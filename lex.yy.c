@@ -1008,7 +1008,7 @@ YY_RULE_SETUP
 case 30:
 YY_RULE_SETUP
 #line 58 "phase1.lex"
-{currCol += yyleng; return IDENT;}
+{currCol += yyleng; yylval.num = strdup(yytext); return IDENT;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP

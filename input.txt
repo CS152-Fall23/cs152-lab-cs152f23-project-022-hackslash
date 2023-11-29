@@ -1,1 +1,9 @@
-if/ [1 gth/ 2]
+int/ x = 0; 
+if/ [x gth/ 1] {
+    x = x add/ 1; 
+}
+
+int/[0] arr; 
+
+in/ x;
+out/ y; 
