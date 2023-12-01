@@ -1,9 +1,9 @@
 int/ x = 0; 
 if/ [x gth/ 1] {
-    x = x add/ 1; 
+    x = x add/ 12; 
 }
 
-int/[0] arr; 
+int/[10] arr; 
 
 in/ x;
 out/ y; 

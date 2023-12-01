@@ -1,6 +1,18 @@
 %{
     #include <stdio.h>
     #include <string.h> 
+    #include <stddef.h> 
+    #include <stdlib.h> 
+
+    typedef struct { char **data; size_t len; } Vec; 
+    static void VecPush(Vec *vec, char *cstring) {
+        if( !(vec->data = realloc(vec->data, sizeof(char *)*(vec->len + 1)))) {
+            printf("bad_alloc\n"); exit(-1); 
+        }
+        vec->data[vec->len++] = cstring; 
+    }
+
+    static Vec vec; 
     
     int yylex(void);
     void yyerror(char const *err){
@@ -34,7 +46,7 @@
 %token VAR FUNC NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO LH_ID INT STRING CHAR DOUBLE BOOL VOID
 %left ADD SUB
 %left MUL DIV
-%left LESS_THAN GREATER_THAN EQUAL_TO LESS_EQUAL_TO GREATER_EQUAL_TO NOT_EQUAL_TO EQL
+%left LESS_THAN GREATER_THAN EQUAL_TO LESS_EQUAL_TO GREATER_EQUAL_TO NOT_EQUAL_TO EQL 
 %left R_SQUARE L_SQUARE
 %union{
     char* num;
@@ -42,12 +54,14 @@
     VarData var;
 }
 
-%type<num> NUM rel_exp if_stmt IDENT
-%type<var> add_exp mul_exp exp rel read_write_stmt lh_assign
-%start stmts
+%type<num> NUM rel_exp IDENT
+%type<var> add_exp mul_exp exp rel read_write_stmt lh_assign if_stmt stmts
+%start program
 
 %%
 /* grammar */
+
+program: {printf("func main\n");} stmts {printf("endfunc\n");}
 
 stmts: stmt stmts {printf("Normal statement proc!\n");}
 | stmt {printf("Normal statement proc!\n");}
@@ -128,7 +142,18 @@ while_stmt: WHILE L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY {}
 
 
 ///////////////////////////////////////////// IF STATEMENTS ///////////////////////////////////////////////////
-if_stmt: IF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY { } 
+if_stmt: IF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY {
+
+    char *name = genTempName(); 
+    char *label = genLabelName(0); 
+
+    printf(". %s\n", name); 
+    printf("<= %s, %s\n", name, $3); 
+    printf("?:= %s, %s\n", label, name); 
+
+    printf(".> %s\n", $6); 
+    printf(": %s\n", genLabelName(-1)); 
+} 
 | IF IF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY elseif {}
 
 
@@ -185,6 +210,16 @@ mul_exp: exp {}
 
 ///////////////////////////////////////////// EXPRESSIONS ///////////////////////////////////////////////////
 exp: NUM {
+    int i = 0; 
+    for( i = 0; i < vec.len; ++i) {
+        if(0 == strcmp(vec.data[i], $1)) {
+            printf("Oh no, a unique semantic error message!\n"); 
+            exit(-1);
+        }
+    }
+
+    VecPush(&vec, $1); 
+
     char *name = genTempName();
 
     printf(". %s\n", name);

@@ -1,3 +1,4 @@
+func main
 . temp0
 = temp0, 0
 . temp1
@@ -5,11 +6,16 @@
 . temp2
 > temp2, x, temp1
 . temp3
-= temp3, 1
+= temp3, 12
 . temp4
 + temp4, x, temp3
 Normal statement proc!
-.[]< temp5, 0
+. temp5
+<= temp5, temp2
+?:= label0, temp5
+.> x
+: label0
+.[]< temp6, 10
 .< x
 .> y
 Normal statement proc!
@@ -17,3 +23,4 @@ Normal statement proc!
 Normal statement proc!
 Normal statement proc!
 Normal statement proc!
+endfunc
