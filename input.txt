@@ -1,6 +1,10 @@
 int/ one;
 one = 1;
 
-if/[one lth/ 3]{
-    one = 3;
+while/[one lth/ 3]{
+    one = one add/ 1;
 }
+
+do/{
+    one = one sub/ 1;
+} while/[one gte/ 0]
