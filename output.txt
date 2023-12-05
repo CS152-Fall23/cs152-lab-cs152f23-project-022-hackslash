@@ -1,0 +1,109 @@
+argument passed
+var -> INT
+lh_id -> IDENT
+lh_assign -> var lh_id
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+assignment -> lh_assign = rel_exp;
+stmt -> assignment
+var -> INT
+lh_id -> IDENT
+lh_assign -> var lh_id
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+assignment -> lh_assign = rel_exp;
+stmt -> assignment
+var -> INT
+lh_id -> IDENT
+declaration -> var LH_ID;
+stmt -> declaration
+var -> INT
+lh_id -> IDENT
+lh_assign -> var lh_id
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+assignment -> lh_assign = rel_exp;
+stmt -> assignment
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+rel -> rel_exp NOT_EQUAL_TO rel_exp
+rel_exp -> rel
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+rel -> rel_exp EQUAL_TO rel_exp
+rel_exp -> rel
+lh_assign -> IDENTexp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+assignment -> lh_assign = rel_exp;
+stmt -> assignment
+stmts -> stmt
+elseif -> epsilon
+if_stmt -> IF[rel_exp]{stmts}
+stmt -> if_stmt
+lh_assign -> IDENTexp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+exp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+add_exp -> add_exp ADD add_exp
+rel_exp -> add_exp
+assignment -> lh_assign = rel_exp;
+stmt -> assignment
+lh_assign -> IDENTexp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+assignment -> lh_assign = rel_exp;
+stmt -> assignment
+lh_assign -> IDENTexp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+rel_exp -> add_exp
+assignment -> lh_assign = rel_exp;
+stmt -> assignment
+lh_assign -> IDENTexp -> IDENT
+mul_exp -> exp
+add_exp -> mul_exp
+exp -> NUM
+mul_exp -> exp
+add_exp -> mul_exp
+add_exp -> add_exp ADD add_exp
+rel_exp -> add_exp
+assignment -> lh_assign = rel_exp;
+stmt -> assignment
+read_write -> print/(IDENT)
+stmt -> read_write_stmt
+stmts -> stmt
+stmts -> stmt stmts
+stmts -> stmt stmts
+stmts -> stmt stmts
+stmts -> stmt stmts
+stmts -> stmt stmts
+while_stmt -> WHILE[rel_exp]{stmts}
+stmt -> while_stmt
+stmts -> stmt
+stmts -> stmt stmts
+stmts -> stmt stmts
+stmts -> stmt stmts
+stmts -> stmt stmts

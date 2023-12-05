@@ -39,6 +39,12 @@
 
         return strdup(buff); 
     }
+    static char* genTempName() {
+        static unsigned long long counter;
+        static char buff[4096]; sprintf(buff, "temp%llu", counter++);
+        return strdup(buff);
+    }
+    typedef struct { char *name; char *value; } VarData;
 %}
 
 /* %define parse.error  */
