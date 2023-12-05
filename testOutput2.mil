@@ -1,26 +1,19 @@
 func main
+. one
 . temp0
-= temp0, 0
+= temp0, 1
+= one, temp0
 . temp1
-= temp1, 1
+= temp1, 3
 . temp2
-> temp2, x, temp1
+< temp2, one, temp1
 . temp3
-= temp3, 12
+== temp3, 0, temp2
+?:= label1, temp3
 . temp4
-+ temp4, x, temp3
-Normal statement proc!
-. temp5
-<= temp5, temp2
-?:= label0, temp5
-.> x
+= temp4, 3
+= one, temp4
+:= label0
+: label1
 : label0
-.[]< temp6, 10
-.< x
-.> y
-Normal statement proc!
-Normal statement proc!
-Normal statement proc!
-Normal statement proc!
-Normal statement proc!
 endfunc

@@ -40,12 +40,11 @@ assignment: lh_assign EQL rel_exp SEMI {printf("assignment -> lh_assign = rel_ex
 
 lh_assign: var lh_id {printf("lh_assign -> var lh_id\n");}
 | var L_SQUARE R_SQUARE lh_id {printf("lh_assign -> var[]");}
-| IDENT {printf("lh_assign -> IDENT");}
 
 declaration: lh_assign SEMI {printf("declaration -> lh_assign;\n");}
 
 lh_id: IDENT {printf("lh_id -> IDENT\n");}
-| IDENT COMMA IDENT {printf("lh_id -> IDENT,IDENT\n");}
+| IDENT COMMA lh_id {printf("lh_id -> IDENT,IDENT\n");}
 
 function: var IDENT L_SQUARE arg R_SQUARE L_CURLY stmts R_CURLY {printf("function -> var IDENT[arg]{stmts}");}
 | IDENT L_SQUARE pass_arg R_SQUARE SEMI {printf("function -> IDENT[arg];\n");}

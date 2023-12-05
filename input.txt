@@ -1,9 +1,6 @@
-int/ x = 0; 
-if/ [x gth/ 1] {
-    x = x add/ 12; 
+int/ one;
+one = 1;
+
+if/[one lth/ 3]{
+    one = 3;
 }
-
-int/[10] arr; 
-
-in/ x;
-out/ y; 

@@ -26,8 +26,6 @@
         return strdup(buff);
     }
 
-    typedef struct { char *name; char *value; } VarData;
-
     static char* genLabelName(int offset) {
         static unsigned long long counter; 
         static char buff[4096]; 
@@ -39,12 +37,6 @@
 
         return strdup(buff); 
     }
-    static char* genTempName() {
-        static unsigned long long counter;
-        static char buff[4096]; sprintf(buff, "temp%llu", counter++);
-        return strdup(buff);
-    }
-    typedef struct { char *name; char *value; } VarData;
 %}
 
 /* %define parse.error  */
@@ -56,12 +48,9 @@
 %left R_SQUARE L_SQUARE
 %union{
     char* num;
-    char* label; 
-    VarData var;
 }
 
-%type<num> NUM rel_exp IDENT
-%type<var> add_exp mul_exp exp rel read_write_stmt lh_assign if_stmt stmts
+%type<num> NUM rel_exp IDENT add_exp mul_exp exp rel read_write_stmt lh_decl if_stmt stmts IF L_CURLY
 %start program
 
 %%
@@ -69,8 +58,8 @@
 
 program: {printf("func main\n");} stmts {printf("endfunc\n");}
 
-stmts: stmt stmts {printf("Normal statement proc!\n");}
-| stmt {printf("Normal statement proc!\n");}
+stmts: stmt stmts {}
+| stmt {}
 
 
 ///////////////////////////////////////////// STATEMENTS ///////////////////////////////////////////////////
@@ -85,28 +74,35 @@ stmt: declaration {}
 
 
 ///////////////////////////////////////////// ASSIGNMENT ///////////////////////////////////////////////////
-assignment: lh_assign EQL rel_exp SEMI {}
-
+assignment: IDENT EQL rel_exp SEMI { 
+    printf("= %s, %s\n", $1, $3);
+}
+| IDENT L_SQUARE add_exp R_SQUARE EQL rel_exp SEMI {
+    printf("[]= %s, %s, %s\n", $1, $6, $3);
+}
 
 
 ///////////////////////////////////////////// DECLARATION ///////////////////////////////////////////////////
-declaration: lh_assign SEMI {}
+declaration: lh_decl SEMI {}
 
 
 ///////////////////////////////////////////// LEFT HAND ASSIGN ///////////////////////////////////////////////////
-lh_assign: var lh_id {}
-| var L_SQUARE NUM R_SQUARE lh_id {
-    char *name = genTempName();
-    printf(".[]< %s, %s\n", name, $3);
+lh_decl: var IDENT {
+    printf(". %s\n", $2);
 
-    $$.name=name;
+    $$=$2;
 }
-| IDENT {}
+| var L_SQUARE NUM R_SQUARE IDENT {
+    int x = atoi($3);
+    if (x <= 0){
+        printf("Array declaration at line: %llu, of less than 0: %s\n", currLine, $5    );
+        exit(1);
+    }
 
+    printf(".[] %s, %s\n", $5, $3);
 
-///////////////////////////////////////////// LEFT HAND ID ///////////////////////////////////////////////////
-lh_id: IDENT {}
-| IDENT COMMA IDENT {}
+    $$=$5;
+}
 
 
 ///////////////////////////////////////////// FUNCTIONS ///////////////////////////////////////////////////
@@ -148,75 +144,77 @@ while_stmt: WHILE L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY {}
 
 
 ///////////////////////////////////////////// IF STATEMENTS ///////////////////////////////////////////////////
-if_stmt: IF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY {
+if_stmt: IF L_SQUARE rel_exp R_SQUARE L_CURLY {
+    char *label = genLabelName(0);
+    char *label1 = genLabelName(0);
+    char *name = genTempName();
+    printf(". %s\n", name);
+    printf("== %s, %s, %s\n", name, "0", $3);
 
-    char *name = genTempName(); 
-    char *label = genLabelName(0); 
+    printf("?:= %s, %s\n", label1, name);
 
-    printf(". %s\n", name); 
-    printf("<= %s, %s\n", name, $3); 
-    printf("?:= %s, %s\n", label, name); 
-
-    printf(".> %s\n", $6); 
-    printf(": %s\n", genLabelName(-1)); 
+    $1 = label;
+    $5 = label1;
+} stmts R_CURLY {
+    printf(":= %s\n", $1);
+    printf(": %s\n", $5);
+} else {
+    printf(": %s\n", $1);
 } 
-| IF IF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY elseif {}
+| IF IF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY else {}
 
 
 
-///////////////////////////////////////////// ELSEIF STATEMENTS ///////////////////////////////////////////////////
-elseif: ELSE L_CURLY stmts R_CURLY {}
-| ELIF L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY elseif {}
+///////////////////////////////////////////// ELSE STATEMENTS ///////////////////////////////////////////////////
+else: ELSE L_CURLY stmts R_CURLY { }
 | %empty {}
 
 
 
 /////////////////////////////////////////////  EXPRESSIONS ///////////////////////////////////////////////////
-rel_exp: add_exp{ }
-| rel { }
+rel_exp: add_exp{ $$ = $1; }
+| rel { $$ = $1; }
 
 
 ///////////////////////////////////////////// ADD/SUB EXPRESSIONS ///////////////////////////////////////////////////
-add_exp: mul_exp {
-    $$ = $1;  
-}
+add_exp: mul_exp { $$ = $1; }
 | add_exp ADD add_exp {
     char *name = genTempName();
     printf(". %s\n", name);
-    printf("+ %s, %s, %s\n", name, $1.name, $3.name);
+    printf("+ %s, %s, %s\n", name, $1, $3);
 
-    $$.name=name;
+    $$=name;
     } 
 | add_exp SUB add_exp {
     char *name = genTempName();
     printf(". %s\n", name);
-    printf("- %s, %s, %s\n", name, $1.name, $3.name);
+    printf("- %s, %s, %s\n", name, $1, $3);
 
-    $$.name=name;
+    $$=name;
 }
 
 
 ///////////////////////////////////////////// MUL/DIV EXPRESSIONS ///////////////////////////////////////////////////
-mul_exp: exp {}
+mul_exp: exp { $$ = $1; }
 | mul_exp MUL mul_exp {
     char *name = genTempName();
     printf(". %s\n", name);
-    printf("* %s, %s, %s\n", name, $1.name, $3.name);
+    printf("* %s, %s, %s\n", name, $1, $3);
 
-    $$.name=name;
+    $$=name;
 } 
 | mul_exp DIV mul_exp {
     char *name = genTempName();
     printf(". %s\n", name);
-    printf("/ %s, %s, %s\n", name, $1.name, $3.name);
+    printf("/ %s, %s, %s\n", name, $1, $3);
 
-    $$.name=name;
+    $$=name;
 } 
 
 
 ///////////////////////////////////////////// EXPRESSIONS ///////////////////////////////////////////////////
 exp: NUM {
-    int i = 0; 
+    /*int i = 0; 
     for( i = 0; i < vec.len; ++i) {
         if(0 == strcmp(vec.data[i], $1)) {
             printf("Oh no, a unique semantic error message!\n"); 
@@ -224,65 +222,76 @@ exp: NUM {
         }
     }
 
-    VecPush(&vec, $1); 
+    VecPush(&vec, $1); */
 
     char *name = genTempName();
 
     printf(". %s\n", name);
     printf("= %s, %s\n", name, $1);
 
-    $$.name = name;
+    $$ = name;
 } 
-| IDENT { }
-| IDENT L_SQUARE add_exp R_SQUARE { }
-| SUB exp { }
+| IDENT { $$ = $1; }
+| IDENT L_SQUARE add_exp R_SQUARE { 
+    char *name = genTempName();
+
+    printf(". %s\n", name);
+    printf("=[] %s, %s, %s\n", name, $1, $3);
+
+    $$ = name;
+ }
+| SUB exp { 
+    char *name = genTempName();
+    printf(". %s\n", name);
+    printf("- %s, %s, %s\n", name, "0", $2);
+    $$ = name;
+}
 | L_PAREN add_exp R_PAREN { }
 
 
 ///////////////////////////////////////////// RELATIONAL EXPRESSIONS ///////////////////////////////////////////////////
-rel: rel_exp LESS_THAN rel_exp {     
+rel: add_exp LESS_THAN add_exp {     
     char *name = genTempName();
     printf(". %s\n", name);
     printf("< %s, %s, %s\n", name, $1, $3);
 
-    $$.name=name; 
+    $$=name; 
 } 
-| rel_exp GREATER_THAN rel_exp { 
+| add_exp GREATER_THAN add_exp { 
     char *name = genTempName();
     printf(". %s\n", name);
     printf("> %s, %s, %s\n", name, $1, $3);
 
-    $$.name=name; 
+    $$=name; 
  } 
-| rel_exp EQUAL_TO rel_exp { 
+| add_exp EQUAL_TO add_exp { 
     char *name = genTempName();
     printf(". %s\n", name);
     printf("== %s, %s, %s\n", name, $1, $3);
 
-    $$.name=name; 
+    $$=name; 
 } 
-| rel_exp LESS_EQUAL_TO rel_exp { 
+| add_exp LESS_EQUAL_TO add_exp { 
     char *name = genTempName();
     printf(". %s\n", name);
     printf("<= %s, %s, %s\n", name, $1, $3);
 
-    $$.name=name; 
+    $$=name; 
  } 
-| rel_exp GREATER_EQUAL_TO rel_exp { 
+| add_exp GREATER_EQUAL_TO add_exp { 
     char *name = genTempName();
     printf(". %s\n", name);
     printf(">= %s, %s, %s\n", name, $1, $3);
 
-    $$.name=name; 
+    $$=name; 
 } 
-| rel_exp NOT_EQUAL_TO rel_exp { 
+| add_exp NOT_EQUAL_TO add_exp { 
     char *name = genTempName();
     printf(". %s\n", name);
     printf("!= %s, %s, %s\n", name, $1, $3);
 
-    $$.name=name; 
+    $$=name; 
 } 
-| L_SQUARE add_exp R_SQUARE { }
 
 
 ///////////////////////////////////////////// VARIABLES ///////////////////////////////////////////////////
