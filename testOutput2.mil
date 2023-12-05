@@ -1,0 +1,19 @@
+func main
+. one
+. temp0
+= temp0, 1
+= one, temp0
+. temp1
+= temp1, 3
+. temp2
+< temp2, one, temp1
+. temp3
+== temp3, 0, temp2
+?:= label1, temp3
+. temp4
+= temp4, 3
+= one, temp4
+:= label0
+: label1
+: label0
+endfunc

@@ -1003,12 +1003,12 @@ YY_RULE_SETUP
 case 29:
 YY_RULE_SETUP
 #line 57 "phase1.lex"
-{currCol += yyleng; return NUM;}
+{currCol += yyleng; yylval.num = strdup(yytext); return NUM;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 58 "phase1.lex"
-{currCol += yyleng; return IDENT;}
+{currCol += yyleng; yylval.num = strdup(yytext); return IDENT;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
@@ -2101,4 +2101,3 @@ int main(int argc, char** argv){
 	return 0;
 
 }
-
