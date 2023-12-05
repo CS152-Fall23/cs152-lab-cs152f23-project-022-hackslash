@@ -50,7 +50,7 @@
     char* num;
 }
 
-%type<num> NUM rel_exp IDENT add_exp mul_exp exp rel read_write_stmt lh_decl if_stmt stmts IF L_CURLY
+%type<num> NUM rel_exp IDENT add_exp mul_exp exp rel read_write_stmt lh_decl if_stmt stmts IF L_CURLY WHILE
 %start program
 
 %%
@@ -138,23 +138,54 @@ read_write_stmt: IN IDENT SEMI {
 
 
 ///////////////////////////////////////////// WHILE STATEMENTS ///////////////////////////////////////////////////
-while_stmt: WHILE L_SQUARE rel_exp R_SQUARE L_CURLY stmts R_CURLY {}
-| DO L_CURLY stmts R_CURLY WHILE L_SQUARE rel_exp R_SQUARE {}
+while_stmt: WHILE {
+    char *loop = genLabelName(0);
+
+    printf(": %s\n", loop);
+
+    $1 = loop;
+} L_SQUARE rel_exp R_SQUARE L_CURLY {
+    char *name = genTempName();
+    char *endwhile = genLabelName(0);
+    
+    printf(". %s\n", name);
+    printf("== %s, %s, %s\n", name, "0", $4);
+
+    printf("?:= %s, %s\n", endwhile, name);
+
+    $6 = endwhile;
+} stmts R_CURLY { 
+    printf(":= %s\n", $1);
+    printf(": %s\n", $6); 
+}
+| DO L_CURLY {
+    char* loop = genLabelName(0);
+    
+    printf(": %s\n", loop);
+
+    $2 = loop;
+} stmts R_CURLY WHILE L_SQUARE rel_exp R_SQUARE {
+    char* name = genTempName();
+
+    printf(". %s\n", name);
+    printf("== %s, %s, %s\n", name, "1", $8);
+    printf("?:= %s, %s\n", $2, name);
+}
 
 
 
 ///////////////////////////////////////////// IF STATEMENTS ///////////////////////////////////////////////////
 if_stmt: IF L_SQUARE rel_exp R_SQUARE L_CURLY {
-    char *label = genLabelName(0);
-    char *label1 = genLabelName(0);
+    char *endif = genLabelName(0);
+    char *elsestmt = genLabelName(0);
     char *name = genTempName();
     printf(". %s\n", name);
     printf("== %s, %s, %s\n", name, "0", $3);
 
-    printf("?:= %s, %s\n", label1, name);
+    printf("?:= %s, %s\n", elsestmt, name);
 
-    $1 = label;
-    $5 = label1;
+    $1 = endif;
+    $5 = elsestmt;
 } stmts R_CURLY {
     printf(":= %s\n", $1);
     printf(": %s\n", $5);

@@ -3,6 +3,7 @@ func main
 . temp0
 = temp0, 1
 = one, temp0
+: label0
 . temp1
 = temp1, 3
 . temp2
@@ -11,9 +12,23 @@ func main
 == temp3, 0, temp2
 ?:= label1, temp3
 . temp4
-= temp4, 3
-= one, temp4
+= temp4, 1
+. temp5
++ temp5, one, temp4
+= one, temp5
 := label0
 : label1
-: label0
+: label2
+. temp6
+= temp6, 1
+. temp7
+- temp7, one, temp6
+= one, temp7
+. temp8
+= temp8, 0
+. temp9
+>= temp9, one, temp8
+. temp10
+== temp10, 1, temp9
+?:= label2, temp10
 endfunc
