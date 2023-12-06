@@ -1,10 +1,12 @@
-int/ one;
-one = 1;
+int/ funcname (int/ one, int/ two){
+    int/ three;
+    three = one add/ two;
 
-while/[one lth/ 3]{
-    one = one add/ 1;
+    return/ three;
 }
 
-do/{
-    one = one sub/ 1;
-} while/[one gte/ 0]
+int/ main() {
+    int/ new;
+
+    new = funcname(1, 2);
+}

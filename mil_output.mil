@@ -1,0 +1,23 @@
+func funcname
+. one
+= one, $0
+. two
+= two, $1
+. three
+. temp0
++ temp0, one, two
+= three, temp0
+ret three
+endfunc
+func main
+. new
+. temp1
+= temp1, 1
+. temp2
+= temp2, 2
+param temp2
+param temp1
+. temp3
+call funcname, temp3
+= new, temp3
+endfunc

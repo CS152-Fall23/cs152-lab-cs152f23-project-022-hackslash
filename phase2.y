@@ -37,11 +37,13 @@
 
         return strdup(buff); 
     }
+
+    int funcCounter = 0;
 %}
 
 /* %define parse.error  */
 
-%token VAR FUNC NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO LH_ID INT STRING CHAR DOUBLE BOOL VOID
+%token VAR FUNC NUM IDENT L_CURLY L_PAREN L_SQUARE R_CURLY R_PAREN R_SQUARE COMMA SEMI BREAK IF ELIF ELSE IN OUT PRINT WHILE DO LH_ID INT STRING CHAR DOUBLE BOOL VOID RETURN
 %left ADD SUB
 %left MUL DIV
 %left LESS_THAN GREATER_THAN EQUAL_TO LESS_EQUAL_TO GREATER_EQUAL_TO NOT_EQUAL_TO EQL 
@@ -56,21 +58,22 @@
 %%
 /* grammar */
 
-program: {printf("func main\n");} stmts {printf("endfunc\n");}
+program: stmts { }
 
 stmts: stmt stmts {}
-| stmt {}
+| stmt { }
 
 
 ///////////////////////////////////////////// STATEMENTS ///////////////////////////////////////////////////
 stmt: declaration {}
 | assignment {}
-| function {}
+| function_decl {}
 | break {}
 | read_write_stmt {}
 | if_stmt {}
 | while_stmt {}
-
+| return {}
+| expression {}
 
 
 ///////////////////////////////////////////// ASSIGNMENT ///////////////////////////////////////////////////
@@ -86,7 +89,7 @@ assignment: IDENT EQL rel_exp SEMI {
 declaration: lh_decl SEMI {}
 
 
-///////////////////////////////////////////// LEFT HAND ASSIGN ///////////////////////////////////////////////////
+///////////////////////////////////////////// LEFT HAND DECLARE ///////////////////////////////////////////////////
 lh_decl: var IDENT {
     printf(". %s\n", $2);
 
@@ -105,21 +108,49 @@ lh_decl: var IDENT {
 }
 
 
-///////////////////////////////////////////// FUNCTIONS ///////////////////////////////////////////////////
-function: var IDENT L_SQUARE arg R_SQUARE L_CURLY stmts R_CURLY {}
-| IDENT L_SQUARE pass_arg R_SQUARE SEMI {}
+///////////////////////////////////////////// FUNCTION DECLARE ///////////////////////////////////////////////////
+function_decl: var IDENT {
+    printf("func %s\n", $2);
+} L_PAREN arg R_PAREN L_CURLY stmts R_CURLY {
+    printf("endfunc\n");
+}
 
 
-///////////////////////////////////////////// ARGUMENT ///////////////////////////////////////////////////
-arg: var IDENT {}
-| var IDENT COMMA arg {}
-| var L_SQUARE R_SQUARE IDENT {}
-| var L_SQUARE R_SQUARE IDENT COMMA arg {}
+///////////////////////////////////////////// RETURN ///////////////////////////////////////////////////
+
+return: RETURN SEMI { 
+    char *name = genTempName();
+
+    printf(". %s\n", name);
+    printf("ret %s\n", name);
+}
+| RETURN rel_exp SEMI { 
+    printf("ret %s\n", $2);
+ }
 
 
-///////////////////////////////////////////// ADD/SUB EXPRESSIONS ///////////////////////////////////////////////////
-pass_arg: rel_exp {}
-| rel_exp COMMA pass_arg {}
+///////////////////////////////////////////// ARGUMENTS ///////////////////////////////////////////////////
+arg: var IDENT {
+    printf(". %s\n", $2);
+    printf("= %s, $%d\n", $2, funcCounter);
+    funcCounter++;
+}
+| var IDENT COMMA {
+    printf(". %s\n", $2);
+    printf("= %s, $%d\n", $2, funcCounter);
+    funcCounter++;
+} arg
+| %empty
+
+
+///////////////////////////////////////////// PASS ARGUMENTS ///////////////////////////////////////////////////
+pass_arg: rel_exp {
+    printf("param %s\n", $1);
+}
+| rel_exp COMMA pass_arg {
+    printf("param %s\n", $1);
+}
+| %empty
 
 
 
@@ -201,13 +232,16 @@ else: ELSE L_CURLY stmts R_CURLY { }
 | %empty {}
 
 
+///////////////////////////////////////////// IF STATEMENTS ///////////////////////////////////////////////////
+expression: rel_exp SEMI { }
+
 
 /////////////////////////////////////////////  EXPRESSIONS ///////////////////////////////////////////////////
 rel_exp: add_exp{ $$ = $1; }
 | rel { $$ = $1; }
 
 
-///////////////////////////////////////////// ADD/SUB EXPRESSIONS ///////////////////////////////////////////////////
+///////////////////////////////////////////// ADD/SUB OPERATORS ///////////////////////////////////////////////////
 add_exp: mul_exp { $$ = $1; }
 | add_exp ADD add_exp {
     char *name = genTempName();
@@ -225,7 +259,7 @@ add_exp: mul_exp { $$ = $1; }
 }
 
 
-///////////////////////////////////////////// MUL/DIV EXPRESSIONS ///////////////////////////////////////////////////
+///////////////////////////////////////////// MUL/DIV OPERATORS ///////////////////////////////////////////////////
 mul_exp: exp { $$ = $1; }
 | mul_exp MUL mul_exp {
     char *name = genTempName();
@@ -271,6 +305,14 @@ exp: NUM {
 
     $$ = name;
  }
+| IDENT { funcCounter = 0; } L_PAREN pass_arg R_PAREN {
+    char *name = genTempName();
+
+    printf(". %s\n", name);
+    printf("call %s, %s\n", $1, name);
+
+    $$ = name;
+} 
 | SUB exp { 
     char *name = genTempName();
     printf(". %s\n", name);
@@ -280,7 +322,7 @@ exp: NUM {
 | L_PAREN add_exp R_PAREN { }
 
 
-///////////////////////////////////////////// RELATIONAL EXPRESSIONS ///////////////////////////////////////////////////
+///////////////////////////////////////////// RELATIONAL OPERATORS ///////////////////////////////////////////////////
 rel: add_exp LESS_THAN add_exp {     
     char *name = genTempName();
     printf(". %s\n", name);
