@@ -46,6 +46,7 @@ UNDERSCORE [_]
 "in/"               {currCol += yyleng; return IN;}
 "out/"              {currCol += yyleng; return OUT;}
 "print/"            {currCol += yyleng; return PRINT;}
+"return/"			{currCol += yyleng; return RETURN;}
 
 "\n"                {currLine++; currCol = 0;}
 "while/"            {currCol += yyleng; return WHILE;}
