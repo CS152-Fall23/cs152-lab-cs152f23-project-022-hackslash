@@ -91,6 +91,10 @@ declaration: lh_decl SEMI {}
 
 ///////////////////////////////////////////// LEFT HAND DECLARE ///////////////////////////////////////////////////
 lh_decl: var IDENT {
+    if (is_reserved_word($2)) {
+        printf("Error: '%s' is a reserved word at line %llu, col %llu\n", $2, currLine, currCol);
+        return -1;
+    }
     printf(". %s\n", $2);
 
     $$=$2;
@@ -377,7 +381,22 @@ var: INT {  }
 
 
 %%
+int is_reserved_word(const char *word) {
+    const char *reserved_words[] = {"true", "false", "VAR", "FUNC", "NUM", "IDENT", "L_CURLY", "L_PAREN", "L_SQUARE", 
+    "R_CURLY", "R_PAREN", "R_SQUARE", "COMMA", "SEMI", "BREAK",
+    "IF", "ELIF", "ELSE", "IN", "OUT", "PRINT", "WHILE", "DO", "LH_ID",
+    "INT", "STRING", "CHAR", "DOUBLE", "BOOL", "VOID", "RETURN", 
+    "ADD", "SUB", "MUL", "DIV", "LESS_THAN", "GREATER_THAN",
+    "EQUAL_TO", "LESS_EQUAL_TO", "GREATER_EQUAL_TO", "NOT_EQUAL_TO", "EQL", "R_SQUARE", "L_SQUARE"};
+    int i;
+    for (i = 0; i < sizeof(reserved_words) / sizeof(reserved_words[0]); i++) {
+        if (strcmp(word, reserved_words[i]) == 0) {
+            return 1;
+        }
+    }
 
+    return 0;
+}
 
 /* static int yyreport_syntax_error(const yypcontext_t *ctx) {
     yysymbol_kind_t tokenCausingError = yypcontext_token(ctx);
