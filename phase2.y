@@ -3,6 +3,7 @@
     #include <string.h> 
     #include <stddef.h> 
     #include <stdlib.h> 
+    #include <stdbool.h>
 
     typedef struct { char **data; size_t len; } Vec; 
     static void VecPush(Vec *vec, char *cstring) {
@@ -39,6 +40,7 @@
     }
 
     int funcCounter = 0;
+    bool mainExists = false;
 %}
 
 /* %define parse.error  */
@@ -58,7 +60,12 @@
 %%
 /* grammar */
 
-program: stmts { }
+program: stmts {
+    if(!mainExists){
+		printf("Error line %d: no main function defined.\n", currLine);
+		exit(0);
+	}
+}
 
 stmts: stmt stmts {}
 | stmt { }
@@ -114,6 +121,9 @@ lh_decl: var IDENT {
 
 ///////////////////////////////////////////// FUNCTION DECLARE ///////////////////////////////////////////////////
 function_decl: var IDENT {
+    if (!strcmp($2, "main")){
+		 mainExists = true;
+	 }
     printf("func %s\n", $2);
 } L_PAREN arg R_PAREN L_CURLY stmts R_CURLY {
     printf("endfunc\n");
