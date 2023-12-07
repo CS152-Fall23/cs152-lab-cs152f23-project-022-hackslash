@@ -4,7 +4,7 @@
     #include <stddef.h> 
     #include <stdlib.h> 
     #include <stdbool.h>
-    
+
     typedef struct { char **data; size_t len; } Vec; 
     static void VecPush(Vec *vec, char *cstring) {
         if( !(vec->data = realloc(vec->data, sizeof(char *)*(vec->len + 1)))) {
@@ -64,7 +64,8 @@ program: stmts {
     if(!mainExists){
 		printf("Error line %d: no main function defined.\n", currLine);
 		exit(0);
-	}}
+	}
+}
 
 stmts: stmt stmts {}
 | stmt { }
