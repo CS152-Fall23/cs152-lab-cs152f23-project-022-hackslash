@@ -38,6 +38,12 @@
 
         return strdup(buff); 
     }
+    const char *reserved_words[] = {"true", "false", "VAR", "FUNC", "NUM", "IDENT", "L_CURLY", "L_PAREN", "L_SQUARE", 
+    "R_CURLY", "R_PAREN", "R_SQUARE", "COMMA", "SEMI", "BREAK",
+    "IF", "ELIF", "ELSE", "IN", "OUT", "PRINT", "WHILE", "DO", "LH_ID",
+    "INT", "STRING", "CHAR", "DOUBLE", "BOOL", "VOID", "RETURN", 
+    "ADD", "SUB", "MUL", "DIV", "LESS_THAN", "GREATER_THAN",
+    "EQUAL_TO", "LESS_EQUAL_TO", "GREATER_EQUAL_TO", "NOT_EQUAL_TO", "EQL", "R_SQUARE", "L_SQUARE"};
 
     int funcCounter = 0;
     bool mainExists = false;
@@ -63,7 +69,7 @@
 program: stmts {
     if(!mainExists){
 		printf("Error line %d: no main function defined.\n", currLine);
-		exit(0);
+		exit(-1);
 	}
 }
 
@@ -392,12 +398,6 @@ var: INT {  }
 
 %%
 int is_reserved_word(const char *word) {
-    const char *reserved_words[] = {"true", "false", "VAR", "FUNC", "NUM", "IDENT", "L_CURLY", "L_PAREN", "L_SQUARE", 
-    "R_CURLY", "R_PAREN", "R_SQUARE", "COMMA", "SEMI", "BREAK",
-    "IF", "ELIF", "ELSE", "IN", "OUT", "PRINT", "WHILE", "DO", "LH_ID",
-    "INT", "STRING", "CHAR", "DOUBLE", "BOOL", "VOID", "RETURN", 
-    "ADD", "SUB", "MUL", "DIV", "LESS_THAN", "GREATER_THAN",
-    "EQUAL_TO", "LESS_EQUAL_TO", "GREATER_EQUAL_TO", "NOT_EQUAL_TO", "EQL", "R_SQUARE", "L_SQUARE"};
     int i;
     for (i = 0; i < sizeof(reserved_words) / sizeof(reserved_words[0]); i++) {
         if (strcmp(word, reserved_words[i]) == 0) {
